@@ -7,10 +7,11 @@ require "base64"
 require "crack"
 require "pry-byebug"
 %w{simple-graphite}.each { |l| require l }
+require "influxdb"
 
 current_dir=File.dirname(__FILE__)
-settings_file="#{current_dir}/settings.json"
-
+new_curr_dir = Dir.pwd
+settings_file=("#{new_curr_dir}/settings.json.example")
 ####################################################################################
 # Method: Read's the Unisphere XSD file and gets all Metrics for the specified scope
 ####################################################################################
@@ -173,7 +174,7 @@ end
 
 config=readSettings(settings_file)
 g = Graphite.new({host: config['graphite']['host'], port: config['graphite']['port']}) if config['graphite']['enabled']
-influxdb = InfluxDB::Client.new host: config['influxdb']['host'], port: config['influxdb']['port']}) if config['influxdb']['enabled']
+influxdb = InfluxDB::Client.new host: config['influx']['host'], port: config['influx']['port'] if config['influx']['enabled']
 
 ## Loop through each Unisphere ##
 config['unisphere'].each do |unisphere|
@@ -223,7 +224,7 @@ config['unisphere'].each do |unisphere|
         end
       end
     end
-    influxdb.write_points(influx_output_payload) if config['influxdb']['enabled']
+    influxdb.write_points(influx_output_payload) if config['influx']['enabled']
     g.send_metrics(graphite_output_payload) if config['graphite']['enabled']
     CSV.open("#{symmetrix['sid']}-#{Time.now.strftime("%Y%m%d%H%M%S")}.csv", "wb") { |csv| graphite_output_payload.to_a.each { |elem| csv << elem } } if config['csv']['enabled']
   end
