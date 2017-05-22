@@ -174,7 +174,21 @@ end
 
 config=readSettings(settings_file)
 g = Graphite.new({host: config['graphite']['host'], port: config['graphite']['port']}) if config['graphite']['enabled']
-influxdb = InfluxDB::Client.new host: config['influx']['host'], port: config['influx']['port'] if config['influx']['enabled']
+influxdb = InfluxDB::Client.new host: config['influx']['host'], port: config['influx']['port'] if 
+config['influx']['enabled']
+
+database  = 'mydb'
+name      = 'foobar'
+precision = 's'
+retention = '1h.cpu'
+
+data = {
+  values:    { value: 0 },
+  tags:      { foo: 'bar', bar: 'baz' }
+  
+}
+
+influxdb.write_point(name, data, precision, retention, database)
 
 ## Loop through each Unisphere ##
 config['unisphere'].each do |unisphere|
