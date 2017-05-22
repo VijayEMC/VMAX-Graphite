@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
-
-require "rest_client"
+require "devkit"
+require "rest-client"
 require "csv"
 require "json"
 require "base64"
