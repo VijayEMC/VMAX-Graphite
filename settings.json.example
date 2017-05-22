@@ -9,7 +9,8 @@
 		"enabled": true,
 		"prefix": false,
 		"host": "localhost",
-		"port": "8086"
+		"port": "8086",
+        "table": "mydb"
 	},
 	"csv": {
 		"enabled": true

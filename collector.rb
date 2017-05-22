@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require "devkit"
+#require "devkit"
 require "rest-client"
 require "csv"
 require "json"
@@ -174,21 +174,24 @@ end
 
 config=readSettings(settings_file)
 g = Graphite.new({host: config['graphite']['host'], port: config['graphite']['port']}) if config['graphite']['enabled']
-influxdb = InfluxDB::Client.new host: config['influx']['host'], port: config['influx']['port'] if 
-config['influx']['enabled']
+influxdb = InfluxDB::Client.new config['influx']['table'], host: config['influx']['host'], port: config['influx']['port'] if config['influx']['enabled']
 
-database  = 'mydb'
-name      = 'foobar'
+
+name      = 'cpu'
 precision = 's'
 retention = '1h.cpu'
+host="serverB"
+region="us_west"
+value=55
+
 
 data = {
-  values:    { value: 0 },
-  tags:      { foo: 'bar', bar: 'baz' }
+  values:    { value: 100.32 },
+  tags:      { host: 'serverA', region: 'us_west' }
   
 }
 
-influxdb.write_point(name, data, precision, retention, database)
+influxdb.write_point(name, data)
 
 ## Loop through each Unisphere ##
 config['unisphere'].each do |unisphere|
