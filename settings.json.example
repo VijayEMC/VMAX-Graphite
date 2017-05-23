@@ -20,7 +20,7 @@
 			"ip": "localhost",
 			"user": "smc",
 			"password": "smc",
-			"port": 8086,
+			"port": 8443,
 			"version": 8,
 			"symmetrix": [
 				{ "sid": "000195701370" },
