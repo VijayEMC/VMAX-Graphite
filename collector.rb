@@ -212,7 +212,8 @@ config['unisphere'].each do |unisphere|
       metrics_param = get_metrics(monitor['scope'],myparams)
       key_payload = build_key_payload(unisphere,symmetrix,monitor)
       keys = get_keys(unisphere,key_payload,monitor,auth)
-      puts "this is Keys" + keys
+      puts "this is Keys" 
+      puts keys
       keys.each do |key|
         parent_ids = diff_key_payload(key)
         if monitor.key?("children")
@@ -234,9 +235,11 @@ config['unisphere'].each do |unisphere|
         end
         if (monitor['scope'] != "Array") || (monitor['scope'] == "Array" && key['symmetrixId'] == symmetrix['sid'])
           metrics_param = get_metrics(monitor['scope'],myparams)
-          puts "this is metrics_param" + metrics_param
+          puts "this is metrics_param"
+          puts metrics_param
           metric_payload = build_metric_payload(unisphere,monitor,symmetrix,metrics_param,key,parent_ids)
-          puts "this is metric_payload" + metric_payload
+          puts "this is metric_payload"
+          puts metric_payload
           metrics = get_perf_metrics(unisphere,metric_payload,monitor,auth)
           metrics_param.each do |metric|
             #puts "this is metrics" + metric
