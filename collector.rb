@@ -211,6 +211,8 @@ config['unisphere'].each do |unisphere|
       next unless monitor['enabled']
       metrics_param = get_metrics(monitor['scope'],myparams)
       key_payload = build_key_payload(unisphere,symmetrix,monitor)
+      puts "this is key_payload"
+      puts key_payload
       keys = get_keys(unisphere,key_payload,monitor,auth)
       puts "this is Keys" 
       puts keys
