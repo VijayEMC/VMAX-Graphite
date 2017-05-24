@@ -131,6 +131,9 @@
   <xs:element name="imDirectorKeyResult" type="performance:IMDirectorKeyResultType"/>
   <xs:element name="imDirectorParam" type="performance:IMDirectorParamType"/>
   <xs:element name="imDirectorResult" type="performance:IMDirectorResultType"/>
+  <xs:element name="keyInfo" type="performance:KeyInfoType"/>
+  <xs:element name="performanceSummaryKeyParam" type="performance:PerformanceSummaryKeyParamType"/>
+  <xs:element name="performanceSummaryKeyResult" type="performance:PerformanceSummaryKeyResultType"/>
   <xs:element name="poolInfo" type="performance:PoolInfoType"/>
   <xs:element name="poolKeyResult" type="performance:PoolKeyResultType"/>
   <xs:element name="portGroupInfo" type="performance:PortGroupInfoType"/>
@@ -346,9 +349,27 @@
     <xs:complexContent>
       <xs:extension base="common:ParamType">
         <xs:sequence>
-          <xs:element name="startDate" type="xs:long" minOccurs="1"/>
-          <xs:element name="endDate" type="xs:long" minOccurs="1"/>
-          <xs:element name="symmetrixId" type="xs:string" minOccurs="1"/>
+          <xs:element name="startDate" type="xs:long" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                <![CDATA[Starting date in millisecond.]]>
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="endDate" type="xs:long" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                <![CDATA[Ending date in millisecond.]]>
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="symmetrixId" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                <![CDATA[The Symmetrix array ID.]]>
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -440,6 +461,17 @@
 <pre>
 &lt;simpleType name="ArrayMetric">
 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+&lt;enumeration value="OverallCompressionRatio"/>
+&lt;enumeration value="OverallEfficiencyRatio"/>
+&lt;enumeration value="PercentVPSaved"/>
+&lt;enumeration value="VPSharedRatio"/>
+&lt;enumeration value="VPCompressionRatio"/>
+&lt;enumeration value="VPEfficiencyRatio"/>
+&lt;enumeration value="PercentSnapshotSaved"/>
+&lt;enumeration value="SnapshotSharedRatio"/>
+&lt;enumeration value="SnapshotCompressionRatio"/>
+&lt;enumeration value="SnapshotEfficiencyRatio"/>
+&lt;enumeration value="CopySlotCount"/>
 &lt;enumeration value="HostIOs"/>
 &lt;enumeration value="HostReads"/>
 &lt;enumeration value="HostWrites"/>
@@ -550,6 +582,17 @@
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
+      <xs:enumeration value="OverallCompressionRatio"/>
+      <xs:enumeration value="OverallEfficiencyRatio"/>
+      <xs:enumeration value="PercentVPSaved"/>
+      <xs:enumeration value="VPSharedRatio"/>
+      <xs:enumeration value="VPCompressionRatio"/>
+      <xs:enumeration value="VPEfficiencyRatio"/>
+      <xs:enumeration value="PercentSnapshotSaved"/>
+      <xs:enumeration value="SnapshotSharedRatio"/>
+      <xs:enumeration value="SnapshotCompressionRatio"/>
+      <xs:enumeration value="SnapshotEfficiencyRatio"/>
+      <xs:enumeration value="CopySlotCount"/>
       <xs:enumeration value="HostIOs"/>
       <xs:enumeration value="HostReads"/>
       <xs:enumeration value="HostWrites"/>
@@ -683,10 +726,34 @@
     <xs:complexContent>
       <xs:extension base="common:ParamType">
         <xs:sequence>
-          <xs:element name="startDate" type="xs:long" minOccurs="1"/>
-          <xs:element name="endDate" type="xs:long" minOccurs="1"/>
-          <xs:element name="symmetrixId" type="xs:string" minOccurs="1"/>
-          <xs:element name="dataFormat" type="performance:DataFormat" minOccurs="0"/>
+          <xs:element name="startDate" type="xs:long" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                <![CDATA[Starting date in millisecond.]]>
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="endDate" type="xs:long" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                <![CDATA[Ending date in millisecond.]]>
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="symmetrixId" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                <![CDATA[The Symmetrix array ID.]]>
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="dataFormat" type="performance:DataFormat" minOccurs="0">
+            <xs:annotation>
+              <xs:documentation>
+                <![CDATA[Data Format (Average or Maximum)]]>
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
           <xs:element name="metrics" type="performance:ArrayMetric" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:extension>
@@ -702,6 +769,7 @@
 &lt;complexContent>
 &lt;extension base="{http://www.emc.com/em/2012/07/univmax/restapi/common}ResultType">
 &lt;sequence>
+&lt;element name="CopySlotCount" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -732,8 +800,6 @@
 &lt;element name="FEWriteMissReqs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="ReadResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="WriteResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="PercentXtremSWCacheReadHits" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="XtremSWCacheResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedReadMisses" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedMBReadMisses" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -807,6 +873,16 @@
 &lt;element name="ORM_READS" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="ORM_MB_READ" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="ORM_AVG_READ_SIZE" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="OverallCompressionRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentVPSaved" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="VPSharedRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="VPCompressionRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="VPEfficiencyRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSnapshotSaved" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="SnapshotSharedRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="SnapshotCompressionRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="SnapshotEfficiencyRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="OverallEfficiencyRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;/sequence>
 &lt;attribute name="timestamp" use="required" type="{http://www.emc.com/em/2012/07/univmax/restapi/common}DateType" />
 &lt;/extension>
@@ -818,6 +894,7 @@
     <xs:complexContent>
       <xs:extension base="common:ResultType">
         <xs:sequence>
+          <xs:element name="CopySlotCount" type="xs:float" minOccurs="0"/>
           <xs:element name="HostIOs" type="xs:float" minOccurs="0"/>
           <xs:element name="HostReads" type="xs:float" minOccurs="0"/>
           <xs:element name="HostWrites" type="xs:float" minOccurs="0"/>
@@ -848,8 +925,6 @@
           <xs:element name="FEWriteMissReqs" type="xs:float" minOccurs="0"/>
           <xs:element name="ReadResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="WriteResponseTime" type="xs:float" minOccurs="0"/>
-          <xs:element name="PercentXtremSWCacheReadHits" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheMBs" type="xs:float" minOccurs="0"/>
           <xs:element name="XtremSWCacheResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedReadMisses" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedMBReadMisses" type="xs:float" minOccurs="0"/>
@@ -922,6 +997,16 @@
           <xs:element name="ORM_READS" type="xs:float" minOccurs="0"/>
           <xs:element name="ORM_MB_READ" type="xs:float" minOccurs="0"/>
           <xs:element name="ORM_AVG_READ_SIZE" type="xs:float" minOccurs="0"/>
+          <xs:element name="OverallCompressionRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentVPSaved" type="xs:float" minOccurs="0"/>
+          <xs:element name="VPSharedRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="VPCompressionRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="VPEfficiencyRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSnapshotSaved" type="xs:float" minOccurs="0"/>
+          <xs:element name="SnapshotSharedRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="SnapshotCompressionRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="SnapshotEfficiencyRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="OverallEfficiencyRatio" type="xs:float" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="timestamp" use="required" type="xs:long"/>
       </xs:extension>
@@ -2767,6 +2852,7 @@
 <pre>
 &lt;simpleType name="DatabaseByPoolMetric">
 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+&lt;enumeration value="LocalRepTracks"/>
 &lt;enumeration value="BEReadReqs"/>
 &lt;enumeration value="BEMBReads"/>
 &lt;enumeration value="PrefetchedTracks"/>
@@ -2786,6 +2872,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
+      <xs:enumeration value="LocalRepTracks"/>
       <xs:enumeration value="BEReadReqs"/>
       <xs:enumeration value="BEMBReads"/>
       <xs:enumeration value="PrefetchedTracks"/>
@@ -2851,6 +2938,7 @@
 &lt;complexContent>
 &lt;extension base="{http://www.emc.com/em/2012/07/univmax/restapi/common}ResultType">
 &lt;sequence>
+&lt;element name="LocalRepTracks" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="BEReadReqs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="BEMBReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PrefetchedTracks" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -2875,6 +2963,7 @@
     <xs:complexContent>
       <xs:extension base="common:ResultType">
         <xs:sequence>
+          <xs:element name="LocalRepTracks" type="xs:float" minOccurs="0"/>
           <xs:element name="BEReadReqs" type="xs:float" minOccurs="0"/>
           <xs:element name="BEMBReads" type="xs:float" minOccurs="0"/>
           <xs:element name="PrefetchedTracks" type="xs:float" minOccurs="0"/>
@@ -2980,6 +3069,25 @@
 <pre>
 &lt;simpleType name="DatabaseMetric">
 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+&lt;enumeration value="AvgReadResponseTime6"/>
+&lt;enumeration value="AvgReadResponseTime7"/>
+&lt;enumeration value="AvgWriteResponseTime6"/>
+&lt;enumeration value="AvgWriteResponseTime7"/>
+&lt;enumeration value="ReadResponseTimeCount1"/>
+&lt;enumeration value="ReadResponseTimeCount2"/>
+&lt;enumeration value="ReadResponseTimeCount3"/>
+&lt;enumeration value="ReadResponseTimeCount4"/>
+&lt;enumeration value="ReadResponseTimeCount5"/>
+&lt;enumeration value="ReadResponseTimeCount6"/>
+&lt;enumeration value="ReadResponseTimeCount7"/>
+&lt;enumeration value="WriteResponseTimeCount1"/>
+&lt;enumeration value="WriteResponseTimeCount2"/>
+&lt;enumeration value="WriteResponseTimeCount3"/>
+&lt;enumeration value="WriteResponseTimeCount4"/>
+&lt;enumeration value="WriteResponseTimeCount5"/>
+&lt;enumeration value="WriteResponseTimeCount6"/>
+&lt;enumeration value="WriteResponseTimeCount7"/>
+&lt;enumeration value="Skew"/>
 &lt;enumeration value="HostIOs"/>
 &lt;enumeration value="HostReads"/>
 &lt;enumeration value="HostWrites"/>
@@ -3040,6 +3148,7 @@
 &lt;enumeration value="BlockSize"/>
 &lt;enumeration value="BEPrefetchedMBs"/>
 &lt;enumeration value="IODensity"/>
+&lt;enumeration value="AvgOptimizedReadMissSize"/>
 &lt;enumeration value="XtremSWCacheIOs"/>
 &lt;enumeration value="PercentXtremSWCacheReadHit"/>
 &lt;enumeration value="XtremSWCacheMBs"/>
@@ -3054,12 +3163,53 @@
 &lt;enumeration value="InfoAlertCount"/>
 &lt;enumeration value="WarningAlertCount"/>
 &lt;enumeration value="CriticalAlertCount"/>
+&lt;enumeration value="BEPercentReads"/>
+&lt;enumeration value="BEPercentWrites"/>
+&lt;enumeration value="PercentRandomIO"/>
+&lt;enumeration value="PercentRandomReadHit"/>
+&lt;enumeration value="PercentRandomWriteMiss"/>
+&lt;enumeration value="PercentRandomReads"/>
+&lt;enumeration value="PercentRandomWriteHit"/>
+&lt;enumeration value="PercentRandomWriteMiss"/>
+&lt;enumeration value="PercentSeqIO"/>
+&lt;enumeration value="PercentSeqWrites"/>
+&lt;enumeration value="PercentSeqReadHit"/>
+&lt;enumeration value="PercentSeqReadMiss"/>
+&lt;enumeration value="PercentSeqWriteHit"/>
+&lt;enumeration value="PercentSeqWriteMiss"/>
+&lt;enumeration value="PercentSeqWrites"/>
+&lt;enumeration value="RdfMBRead"/>
+&lt;enumeration value="RdfMBWritten"/>
+&lt;enumeration value="RdfReadHits"/>
+&lt;enumeration value="RdfReads"/>
+&lt;enumeration value="RdfResponseTime"/>
+&lt;enumeration value="RDFRewrites"/>
+&lt;enumeration value="RdfWrites"/>
 &lt;/restriction>
 &lt;/simpleType>
 </pre>]]>
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
+      <xs:enumeration value="AvgReadResponseTime6"/>
+      <xs:enumeration value="AvgReadResponseTime7"/>
+      <xs:enumeration value="AvgWriteResponseTime6"/>
+      <xs:enumeration value="AvgWriteResponseTime7"/>
+      <xs:enumeration value="ReadResponseTimeCount1"/>
+      <xs:enumeration value="ReadResponseTimeCount2"/>
+      <xs:enumeration value="ReadResponseTimeCount3"/>
+      <xs:enumeration value="ReadResponseTimeCount4"/>
+      <xs:enumeration value="ReadResponseTimeCount5"/>
+      <xs:enumeration value="ReadResponseTimeCount6"/>
+      <xs:enumeration value="ReadResponseTimeCount7"/>
+      <xs:enumeration value="WriteResponseTimeCount1"/>
+      <xs:enumeration value="WriteResponseTimeCount2"/>
+      <xs:enumeration value="WriteResponseTimeCount3"/>
+      <xs:enumeration value="WriteResponseTimeCount4"/>
+      <xs:enumeration value="WriteResponseTimeCount5"/>
+      <xs:enumeration value="WriteResponseTimeCount6"/>
+      <xs:enumeration value="WriteResponseTimeCount7"/>
+      <xs:enumeration value="Skew"/>
       <xs:enumeration value="HostIOs"/>
       <xs:enumeration value="HostReads"/>
       <xs:enumeration value="HostWrites"/>
@@ -3120,13 +3270,13 @@
       <xs:enumeration value="BlockSize"/>
       <xs:enumeration value="BEPrefetchedMBs"/>
       <xs:enumeration value="IODensity"/>
+      <xs:enumeration value="AvgOptimizedReadMissSize"/>
       <xs:enumeration value="XtremSWCacheIOs"/>
       <xs:enumeration value="PercentXtremSWCacheReadHit"/>
       <xs:enumeration value="XtremSWCacheMBs"/>
       <xs:enumeration value="XtremSWCacheResponseTime"/>
       <xs:enumeration value="OptimizedReadMisses"/>
       <xs:enumeration value="OptimizedMBReadMisss"/>
-      <xs:enumeration value="AvgOptimizedReadMissSize"/>
       <xs:enumeration value="WritePacedDelay"/>
       <xs:enumeration value="AvgWritePacedDelay"/>
       <xs:enumeration value="DatabaseName"/>
@@ -3134,6 +3284,26 @@
       <xs:enumeration value="InfoAlertCount"/>
       <xs:enumeration value="WarningAlertCount"/>
       <xs:enumeration value="CriticalAlertCount"/>
+      <xs:enumeration value="BEPercentReads"/>
+      <xs:enumeration value="BEPercentWrites"/>
+      <xs:enumeration value="PercentRandomIO"/>
+      <xs:enumeration value="PercentRandomReadHit"/>
+      <xs:enumeration value="PercentRandomWriteMiss"/>
+      <xs:enumeration value="PercentRandomReads"/>
+      <xs:enumeration value="PercentRandomWriteHit"/>
+      <xs:enumeration value="PercentSeqIO"/>
+      <xs:enumeration value="PercentSeqWrites"/>
+      <xs:enumeration value="PercentSeqReadHit"/>
+      <xs:enumeration value="PercentSeqReadMiss"/>
+      <xs:enumeration value="PercentSeqWriteHit"/>
+      <xs:enumeration value="PercentSeqWriteMiss"/>
+      <xs:enumeration value="RdfMBRead"/>
+      <xs:enumeration value="RdfMBWritten"/>
+      <xs:enumeration value="RdfReadHits"/>
+      <xs:enumeration value="RdfReads"/>
+      <xs:enumeration value="RdfResponseTime"/>
+      <xs:enumeration value="RDFRewrites"/>
+      <xs:enumeration value="RdfWrites"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="DatabaseParamType">
@@ -3184,6 +3354,25 @@
 &lt;complexContent>
 &lt;extension base="{http://www.emc.com/em/2012/07/univmax/restapi/common}ResultType">
 &lt;sequence>
+&lt;element name="AvgReadResponseTime6" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="AvgReadResponseTime7" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="AvgWriteResponseTime6" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="AvgWriteResponseTime7" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount1" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount2" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount3" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount4" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount5" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount6" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount7" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount1" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount2" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount3" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount4" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount5" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount6" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount7" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="Skew" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -3244,10 +3433,6 @@
 &lt;element name="BlockSize" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="BEPrefetchedMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="IODensity" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="PercentXtremSWCacheReadHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedReadMisses" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedMBReadMisss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgOptimizedReadMissSize" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -3258,6 +3443,26 @@
 &lt;element name="InfoAlertCount" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="WarningAlertCount" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="CriticalAlertCount" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="BEPercentReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="BEPercentWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomIO" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomReadHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomWriteMiss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomWriteHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqIO" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqReadHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqWriteHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqWriteMiss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfMBRead" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfMBWritten" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfReadHits" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RDFRewrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;/sequence>
 &lt;attribute name="timestamp" use="required" type="{http://www.emc.com/em/2012/07/univmax/restapi/common}DateType" />
 &lt;/extension>
@@ -3269,6 +3474,25 @@
     <xs:complexContent>
       <xs:extension base="common:ResultType">
         <xs:sequence>
+          <xs:element name="AvgReadResponseTime6" type="xs:float" minOccurs="0"/>
+          <xs:element name="AvgReadResponseTime7" type="xs:float" minOccurs="0"/>
+          <xs:element name="AvgWriteResponseTime6" type="xs:float" minOccurs="0"/>
+          <xs:element name="AvgWriteResponseTime7" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount1" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount2" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount3" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount4" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount5" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount6" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount7" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount1" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount2" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount3" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount4" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount5" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount6" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount7" type="xs:float" minOccurs="0"/>
+          <xs:element name="Skew" type="xs:float" minOccurs="0"/>
           <xs:element name="HostIOs" type="xs:float" minOccurs="0"/>
           <xs:element name="HostReads" type="xs:float" minOccurs="0"/>
           <xs:element name="HostWrites" type="xs:float" minOccurs="0"/>
@@ -3329,10 +3553,6 @@
           <xs:element name="BlockSize" type="xs:float" minOccurs="0"/>
           <xs:element name="BEPrefetchedMBs" type="xs:float" minOccurs="0"/>
           <xs:element name="IODensity" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheIOs" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheMBs" type="xs:float" minOccurs="0"/>
-          <xs:element name="PercentXtremSWCacheReadHit" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedReadMisses" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedMBReadMisss" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgOptimizedReadMissSize" type="xs:float" minOccurs="0"/>
@@ -3343,6 +3563,26 @@
           <xs:element name="InfoAlertCount" type="xs:float" minOccurs="0"/>
           <xs:element name="WarningAlertCount" type="xs:float" minOccurs="0"/>
           <xs:element name="CriticalAlertCount" type="xs:float" minOccurs="0"/>
+          <xs:element name="BEPercentReads" type="xs:float" minOccurs="0"/>
+          <xs:element name="BEPercentWrites" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentRandomIO" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentRandomReadHit" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentRandomWriteMiss" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentRandomReads" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentRandomWriteHit" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSeqIO" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSeqWrites" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSeqReadHit" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSeqWriteHit" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSeqWriteMiss" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentRandomWrites" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfMBRead" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfMBWritten" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfReadHits" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfReads" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfResponseTime" type="xs:float" minOccurs="0"/>
+          <xs:element name="RDFRewrites" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfWrites" type="xs:float" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="timestamp" use="required" type="xs:long"/>
       </xs:extension>
@@ -3504,6 +3744,31 @@
 &lt;enumeration value="AvgOptimizedReadMissSize"/>
 &lt;enumeration value="WritePacedDelay"/>
 &lt;enumeration value="AvgWritePacedDelay"/>
+&lt;enumeration value="RdfReads"/>
+&lt;enumeration value="RdfWrites"/>
+&lt;enumeration value="RdfMBRead"/>
+&lt;enumeration value="RdfMBWritten"/>
+&lt;enumeration value="RdfReadHits"/>
+&lt;enumeration value="RDFRewrites"/>
+&lt;enumeration value="IOServiceTimeLong"/>
+&lt;enumeration value="IOServiceTimeShort"/>
+&lt;enumeration value="MaxIOServiceTime"/>
+&lt;enumeration value="MinIOServiceTime"/>
+&lt;enumeration value="RdfResponseTime"/>
+&lt;enumeration value="PercentSeqIO"/>
+&lt;enumeration value="PercentSeqRead"/>
+&lt;enumeration value="PercentSeqReadHit"/>
+&lt;enumeration value="PercentSeqReadMiss"/>
+&lt;enumeration value="PercentSeqWrites"/>
+&lt;enumeration value="PercentSeqWriteHit"/>
+&lt;enumeration value="PercentSeqWriteMiss"/>
+&lt;enumeration value="PercentRandomIO"/>
+&lt;enumeration value="PercentRandomReadHit"/>
+&lt;enumeration value="PercentRandomReadMiss"/>
+&lt;enumeration value="PercentRandomWriteHit"/>
+&lt;enumeration value="PercentRandomWriteMiss"/>
+&lt;enumeration value="BERdfCopy"/>
+&lt;enumeration value="BERdfCopyMB"/>
 &lt;enumeration value="AVG_BE_DISK_TIME"/>
 &lt;enumeration value="AVG_BE_REQ_TIME"/>
 &lt;enumeration value="AVG_BE_TASK_TIME"/>
@@ -3682,6 +3947,31 @@
       <xs:enumeration value="AvgOptimizedReadMissSize"/>
       <xs:enumeration value="WritePacedDelay"/>
       <xs:enumeration value="AvgWritePacedDelay"/>
+      <xs:enumeration value="RdfReads"/>
+      <xs:enumeration value="RdfWrites"/>
+      <xs:enumeration value="RdfMBRead"/>
+      <xs:enumeration value="RdfMBWritten"/>
+      <xs:enumeration value="RdfReadHits"/>
+      <xs:enumeration value="RDFRewrites"/>
+      <xs:enumeration value="IOServiceTimeLong"/>
+      <xs:enumeration value="IOServiceTimeShort"/>
+      <xs:enumeration value="MaxIOServiceTime"/>
+      <xs:enumeration value="MinIOServiceTime"/>
+      <xs:enumeration value="RdfResponseTime"/>
+      <xs:enumeration value="PercentSeqIO"/>
+      <xs:enumeration value="PercentSeqRead"/>
+      <xs:enumeration value="PercentSeqReadHit"/>
+      <xs:enumeration value="PercentSeqReadMiss"/>
+      <xs:enumeration value="PercentSeqWrites"/>
+      <xs:enumeration value="PercentSeqWriteHit"/>
+      <xs:enumeration value="PercentSeqWriteMiss"/>
+      <xs:enumeration value="PercentRandomIO"/>
+      <xs:enumeration value="PercentRandomReadHit"/>
+      <xs:enumeration value="PercentRandomReadMiss"/>
+      <xs:enumeration value="PercentRandomWriteHit"/>
+      <xs:enumeration value="PercentRandomWriteMiss"/>
+      <xs:enumeration value="BERdfCopy"/>
+      <xs:enumeration value="BERdfCopyMB"/>
       <xs:enumeration value="AVG_BE_DISK_TIME"/>
       <xs:enumeration value="AVG_BE_REQ_TIME"/>
       <xs:enumeration value="AVG_BE_TASK_TIME"/>
@@ -3895,15 +4185,36 @@
 &lt;element name="BlockSize" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="BEPrefetchedMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="IODensity" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="PercentXtremSWCacheReadHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedReadMisses" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedMBReadMisss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgOptimizedReadMissSize" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="WritePacedDelay" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgWritePacedDelay" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfMBRead" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfMBWritten" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfReadHits" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RDFRewrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="IOServiceTimeLong" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="IOServiceTimeShort" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="MaxIOServiceTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="MinIOServiceTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqIO" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqRead" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqReadHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqReadMiss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqWriteHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqWriteMiss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomIO" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomReadHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomReadMiss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomWriteHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomWriteMiss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="BERdfCopy" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="BERdfCopyMB" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_BE_DISK_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_BE_REQ_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_BE_TASK_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -3957,7 +4268,6 @@
 &lt;element name="READ_HIT_PER_SEC" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="READ_MISS_PER_SEC" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="READS" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="RESPONSE_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="SAMPLED_AVG_READ_MISS_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="SAMPLED_AVG_RDF_WRITE_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="SAMPLED_AVG_READ_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -3967,7 +4277,6 @@
 &lt;element name="SEQ_READ_MISS_PER_SEC" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="SEQ_READ_PER_SEC" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="SEQ_WRITE_HIT_PER_SEC" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="SEQ_WRITE_MISS_PER_SEC" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="SEQ_WRITE_PER_SEC" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="WRITE_MISS_PER_SEC" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="WRITE_HIT_PER_SEC" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -4078,15 +4387,36 @@
           <xs:element name="BlockSize" type="xs:float" minOccurs="0"/>
           <xs:element name="BEPrefetchedMBs" type="xs:float" minOccurs="0"/>
           <xs:element name="IODensity" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheIOs" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheMBs" type="xs:float" minOccurs="0"/>
-          <xs:element name="PercentXtremSWCacheReadHit" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedReadMisses" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedMBReadMisss" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgOptimizedReadMissSize" type="xs:float" minOccurs="0"/>
           <xs:element name="WritePacedDelay" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgWritePacedDelay" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfReads" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfWrites" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfMBRead" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfMBWritten" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfReadHits" type="xs:float" minOccurs="0"/>
+          <xs:element name="RDFRewrites" type="xs:float" minOccurs="0"/>
+          <xs:element name="IOServiceTimeLong" type="xs:float" minOccurs="0"/>
+          <xs:element name="IOServiceTimeShort" type="xs:float" minOccurs="0"/>
+          <xs:element name="MaxIOServiceTime" type="xs:float" minOccurs="0"/>
+          <xs:element name="MinIOServiceTime" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfResponseTime" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSeqIO" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSeqRead" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSeqReadHit" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSeqReadMiss" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSeqWrites" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSeqWriteHit" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSeqWriteMiss" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentRandomIO" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentRandomReadHit" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentRandomReadMiss" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentRandomWriteHit" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentRandomWriteMiss" type="xs:float" minOccurs="0"/>
+          <xs:element name="BERdfCopy" type="xs:float" minOccurs="0"/>
+          <xs:element name="BERdfCopyMB" type="xs:float" minOccurs="0"/>
           <xs:element name="AVG_BE_DISK_TIME" type="xs:float" minOccurs="0"/>
           <xs:element name="AVG_BE_REQ_TIME" type="xs:float" minOccurs="0"/>
           <xs:element name="AVG_BE_TASK_TIME" type="xs:float" minOccurs="0"/>
@@ -4106,19 +4436,9 @@
           <xs:element name="MB_READ_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="MB_WRITE_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="PERCENT_MISS" type="xs:float" minOccurs="0"/>
-          <xs:element name="PERCENT_RANDOM_IO" type="xs:float" minOccurs="0"/>
           <xs:element name="PERCENT_RANDOM_WRITES" type="xs:float" minOccurs="0"/>
-          <xs:element name="PERCENT_RANDOM_READ_HIT" type="xs:float" minOccurs="0"/>
-          <xs:element name="PERCENT_RANDOM_READ_MISS" type="xs:float" minOccurs="0"/>
           <xs:element name="PERCENT_RANDOM_READS" type="xs:float" minOccurs="0"/>
-          <xs:element name="PERCENT_RANDOM_WRITE_HIT" type="xs:float" minOccurs="0"/>
-          <xs:element name="PERCENT_RANDOM_WRITE_MISS" type="xs:float" minOccurs="0"/>
-          <xs:element name="PERCENT_SEQ_READ_HIT" type="xs:float" minOccurs="0"/>
-          <xs:element name="PERCENT_SEQ_READ_MISS" type="xs:float" minOccurs="0"/>
           <xs:element name="PERCENT_SEQ_READS" type="xs:float" minOccurs="0"/>
-          <xs:element name="PERCENT_SEQ_WRITE_MISS" type="xs:float" minOccurs="0"/>
-          <xs:element name="PERCENT_SEQ_WRITE_HIT" type="xs:float" minOccurs="0"/>
-          <xs:element name="PERCENT_SEQ_WRITES" type="xs:float" minOccurs="0"/>
           <xs:element name="PREFETCHED_TRACK_MB_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="RANDOM_IO_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="RANDOM_READ_HIT_PER_SEC" type="xs:float" minOccurs="0"/>
@@ -4139,7 +4459,6 @@
           <xs:element name="SEQ_READ_MISS_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="SEQ_READ_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="SEQ_WRITE_HIT_PER_SEC" type="xs:float" minOccurs="0"/>
-          <xs:element name="SEQ_WRITE_MISS_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="SEQ_WRITE_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="WRITE_MISS_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="WRITE_HIT_PER_SEC" type="xs:float" minOccurs="0"/>
@@ -5976,6 +6295,7 @@
 &lt;enumeration value="Members"/>
 &lt;enumeration value="AvgQueueDepth"/>
 &lt;enumeration value="PercentBusy"/>
+&lt;enumeration value="PercentIdle"/>
 &lt;/restriction>
 &lt;/simpleType>
 </pre>]]>
@@ -5999,6 +6319,7 @@
       <xs:enumeration value="Members"/>
       <xs:enumeration value="AvgQueueDepth"/>
       <xs:enumeration value="PercentBusy"/>
+      <xs:enumeration value="PercentIdle"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="ExternalDiskParamType">
@@ -6063,9 +6384,9 @@
 &lt;element name="TotalCapacity" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="UsedCapacity" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PercentCapacityUsed" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="Members" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgQueueDepth" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PercentBusy" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentIdle" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;/sequence>
 &lt;attribute name="timestamp" use="required" type="{http://www.emc.com/em/2012/07/univmax/restapi/common}DateType" />
 &lt;/extension>
@@ -6091,9 +6412,9 @@
           <xs:element name="TotalCapacity" type="xs:float" minOccurs="0"/>
           <xs:element name="UsedCapacity" type="xs:float" minOccurs="0"/>
           <xs:element name="PercentCapacityUsed" type="xs:float" minOccurs="0"/>
-          <xs:element name="Members" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgQueueDepth" type="xs:float" minOccurs="0"/>
           <xs:element name="PercentBusy" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentIdle" type="xs:float" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="timestamp" use="required" type="xs:long"/>
       </xs:extension>
@@ -6194,6 +6515,9 @@
 <pre>
 &lt;simpleType name="FEDirectorMetric">
 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+&lt;enumeration value="AvgWPDiscTime"/>
+&lt;enumeration value="AvgRDFSWriteResponseTime"/>
+&lt;enumeration value="AvgReadMissResponseTime"/>
 &lt;enumeration value="PercentBusy"/>
 &lt;enumeration value="HostIOs"/>
 &lt;enumeration value="HostMBs"/>
@@ -6342,6 +6666,9 @@
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
+      <xs:enumeration value="AvgWPDiscTime"/>
+      <xs:enumeration value="AvgRDFSWriteResponseTime"/>
+      <xs:enumeration value="AvgReadMissResponseTime"/>
       <xs:enumeration value="PercentBusy"/>
       <xs:enumeration value="HostIOs"/>
       <xs:enumeration value="HostMBs"/>
@@ -7002,6 +7329,9 @@
 &lt;complexContent>
 &lt;extension base="{http://www.emc.com/em/2012/07/univmax/restapi/common}ResultType">
 &lt;sequence>
+&lt;element name="AvgWPDiscTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="AvgRDFSWriteResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="AvgReadMissResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PercentBusy" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -7126,7 +7456,6 @@
 &lt;element name="AVG_WRITE_RT_OVER_64" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PORT_0_SPEED_GBITS_PER_SEC" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_QUEUE_DEPTH_RANGE_9" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="AVG_QUEUE_DEPTH_RANGE_8" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_QUEUE_DEPTH_RANGE_7" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_QUEUE_DEPTH_RANGE_6" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_QUEUE_DEPTH_RANGE_5" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -7134,7 +7463,6 @@
 &lt;element name="QUOTA_AVG_DELAYED_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="QUOTA_DELAYED_IOS" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="QUOTA_DELAYED_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="QUOTA_IO_RATE" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="QUOTA_MB_RATE" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="QUOTA_PERCENT_DELAYED_IOS" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PORT_0_READ_PER_SEC" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -7155,6 +7483,9 @@
     <xs:complexContent>
       <xs:extension base="common:ResultType">
         <xs:sequence>
+          <xs:element name="AvgWPDiscTime" type="xs:float" minOccurs="0"/>
+          <xs:element name="AvgRDFSWriteResponseTime" type="xs:float" minOccurs="0"/>
+          <xs:element name="AvgReadMissResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="PercentBusy" type="xs:float" minOccurs="0"/>
           <xs:element name="HostIOs" type="xs:float" minOccurs="0"/>
           <xs:element name="HostMBs" type="xs:float" minOccurs="0"/>
@@ -7276,7 +7607,6 @@
           <xs:element name="AVG_WRITE_RT_OVER_64" type="xs:float" minOccurs="0"/>
           <xs:element name="PORT_0_SPEED_GBITS_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="AVG_QUEUE_DEPTH_RANGE_9" type="xs:float" minOccurs="0"/>
-          <xs:element name="AVG_QUEUE_DEPTH_RANGE_8" type="xs:float" minOccurs="0"/>
           <xs:element name="AVG_QUEUE_DEPTH_RANGE_7" type="xs:float" minOccurs="0"/>
           <xs:element name="AVG_QUEUE_DEPTH_RANGE_6" type="xs:float" minOccurs="0"/>
           <xs:element name="AVG_QUEUE_DEPTH_RANGE_5" type="xs:float" minOccurs="0"/>
@@ -7284,7 +7614,6 @@
           <xs:element name="QUOTA_AVG_DELAYED_TIME" type="xs:float" minOccurs="0"/>
           <xs:element name="QUOTA_DELAYED_IOS" type="xs:float" minOccurs="0"/>
           <xs:element name="QUOTA_DELAYED_TIME" type="xs:float" minOccurs="0"/>
-          <xs:element name="QUOTA_IO_RATE" type="xs:float" minOccurs="0"/>
           <xs:element name="QUOTA_MB_RATE" type="xs:float" minOccurs="0"/>
           <xs:element name="QUOTA_PERCENT_DELAYED_IOS" type="xs:float" minOccurs="0"/>
           <xs:element name="PORT_0_READ_PER_SEC" type="xs:float" minOccurs="0"/>
@@ -7618,6 +7947,9 @@
 <pre>
 &lt;simpleType name="FePortMetric">
 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+&lt;enumeration value="ResponseTime"/>
+&lt;enumeration value="ReadResponseTime"/>
+&lt;enumeration value="WriteResponseTime"/>
 &lt;enumeration value="Reads"/>
 &lt;enumeration value="Writes"/>
 &lt;enumeration value="IOs"/>
@@ -7628,12 +7960,17 @@
 &lt;enumeration value="SpeedGBs"/>
 &lt;enumeration value="MaxSpeedGBs"/>
 &lt;enumeration value="PercentBusy"/>
+&lt;enumeration value="HostIOLimitIOs"/>
+&lt;enumeration value="HostIOLimitMBs"/>
 &lt;/restriction>
 &lt;/simpleType>
 </pre>]]>
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
+      <xs:enumeration value="ResponseTime"/>
+      <xs:enumeration value="ReadResponseTime"/>
+      <xs:enumeration value="WriteResponseTime"/>
       <xs:enumeration value="Reads"/>
       <xs:enumeration value="Writes"/>
       <xs:enumeration value="IOs"/>
@@ -7644,6 +7981,8 @@
       <xs:enumeration value="SpeedGBs"/>
       <xs:enumeration value="MaxSpeedGBs"/>
       <xs:enumeration value="PercentBusy"/>
+      <xs:enumeration value="HostIOLimitIOs"/>
+      <xs:enumeration value="HostIOLimitMBs"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="FePortParamType">
@@ -7696,6 +8035,9 @@
 &lt;complexContent>
 &lt;extension base="{http://www.emc.com/em/2012/07/univmax/restapi/common}ResultType">
 &lt;sequence>
+&lt;element name="ResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="Reads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="Writes" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="IOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -7706,6 +8048,8 @@
 &lt;element name="SpeedGBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="MaxSpeedGBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PercentBusy" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="HostIOLimitIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="HostIOLimitMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;/sequence>
 &lt;attribute name="timestamp" use="required" type="{http://www.emc.com/em/2012/07/univmax/restapi/common}DateType" />
 &lt;/extension>
@@ -7717,6 +8061,9 @@
     <xs:complexContent>
       <xs:extension base="common:ResultType">
         <xs:sequence>
+          <xs:element name="ResponseTime" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTime" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="Reads" type="xs:float" minOccurs="0"/>
           <xs:element name="Writes" type="xs:float" minOccurs="0"/>
           <xs:element name="IOs" type="xs:float" minOccurs="0"/>
@@ -7727,6 +8074,8 @@
           <xs:element name="SpeedGBs" type="xs:float" minOccurs="0"/>
           <xs:element name="MaxSpeedGBs" type="xs:float" minOccurs="0"/>
           <xs:element name="PercentBusy" type="xs:float" minOccurs="0"/>
+          <xs:element name="HostIOLimitIOs" type="xs:float" minOccurs="0"/>
+          <xs:element name="HostIOLimitMBs" type="xs:float" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="timestamp" use="required" type="xs:long"/>
       </xs:extension>
@@ -8260,6 +8609,137 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  <xs:complexType name="KeyInfoType">
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[<p>Java class for KeyInfoType complex type.
+<p>The following schema fragment specifies the expected content contained within this class.
+<pre>
+&lt;complexType name="KeyInfoType">
+&lt;complexContent>
+&lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+&lt;attribute name="type" use="required" type="{http://www.emc.com/em/2012/07/univmax/restapi/performance}KeyType" />
+&lt;attribute name="count" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
+&lt;/restriction>
+&lt;/complexContent>
+&lt;/complexType>
+</pre>]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:attribute name="type" use="required" type="performance:KeyType"/>
+    <xs:attribute name="count" use="required" type="xs:int"/>
+  </xs:complexType>
+  <xs:simpleType name="KeyType">
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[<p>Java class for KeyType.
+<p>The following schema fragment specifies the expected content contained within this class.
+<p>
+<pre>
+&lt;simpleType name="KeyType">
+&lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+&lt;enumeration value="Array"/>
+&lt;enumeration value="BEDirector"/>
+&lt;enumeration value="StorageGroup"/>
+&lt;enumeration value="FEDirector"/>
+&lt;enumeration value="RDFDirector"/>
+&lt;enumeration value="Disk"/>
+&lt;enumeration value="DeviceGroup"/>
+&lt;enumeration value="RDFA"/>
+&lt;enumeration value="FastPolicy"/>
+&lt;enumeration value="ThinTier"/>
+&lt;enumeration value="SRP"/>
+&lt;enumeration value="ThinPool"/>
+&lt;enumeration value="RDFS"/>
+&lt;enumeration value="DiskGroup"/>
+&lt;enumeration value="TierByStorageGroup"/>
+&lt;enumeration value="StorageGroupByTier"/>
+&lt;/restriction>
+&lt;/simpleType>
+</pre>]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Array"/>
+      <xs:enumeration value="BEDirector"/>
+      <xs:enumeration value="StorageGroup"/>
+      <xs:enumeration value="FEDirector"/>
+      <xs:enumeration value="RDFDirector"/>
+      <xs:enumeration value="Disk"/>
+      <xs:enumeration value="DeviceGroup"/>
+      <xs:enumeration value="RDFA"/>
+      <xs:enumeration value="FastPolicy"/>
+      <xs:enumeration value="ThinTier"/>
+      <xs:enumeration value="SRP"/>
+      <xs:enumeration value="ThinPool"/>
+      <xs:enumeration value="RDFS"/>
+      <xs:enumeration value="DiskGroup"/>
+      <xs:enumeration value="TierByStorageGroup"/>
+      <xs:enumeration value="StorageGroupByTier"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="PerformanceSummaryKeyParamType">
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[<p>Java class for PerformanceSummaryKeyParamType complex type.
+<p>The following schema fragment specifies the expected content contained within this class.
+<pre>
+&lt;complexType name="PerformanceSummaryKeyParamType">
+&lt;complexContent>
+&lt;extension base="{http://www.emc.com/em/2012/07/univmax/restapi/common}ParamType">
+&lt;sequence>
+&lt;element name="symmetrixId" type="{http://www.emc.com/em/2012/07/univmax/restapi/common}SymmetrixIdType"/>
+&lt;sequence maxOccurs="unbounded">
+&lt;element name="keys" type="{http://www.emc.com/em/2012/07/univmax/restapi/performance}KeyType"/>
+&lt;/sequence>
+&lt;/sequence>
+&lt;/extension>
+&lt;/complexContent>
+&lt;/complexType>
+</pre>]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="common:ParamType">
+        <xs:sequence>
+          <xs:element name="symmetrixId" type="xs:string" minOccurs="1">
+            <xs:annotation>
+              <xs:documentation>
+                <![CDATA[The Symmetrix array ID.]]>
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element name="keys" type="performance:KeyType" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PerformanceSummaryKeyResultType">
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[<p>Java class for PerformanceSummaryKeyResultType complex type.
+<p>The following schema fragment specifies the expected content contained within this class.
+<pre>
+&lt;complexType name="PerformanceSummaryKeyResultType">
+&lt;complexContent>
+&lt;extension base="{http://www.emc.com/em/2012/07/univmax/restapi/common}ResultType">
+&lt;sequence maxOccurs="unbounded" minOccurs="0">
+&lt;element ref="{http://www.emc.com/em/2012/07/univmax/restapi/performance}keyInfo"/>
+&lt;/sequence>
+&lt;/extension>
+&lt;/complexContent>
+&lt;/complexType>
+</pre>]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="common:ResultType">
+        <xs:sequence>
+          <xs:element name="keyInfo" type="performance:KeyInfoType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
   <xs:complexType name="PoolInfoType">
     <xs:annotation>
       <xs:documentation>
@@ -8520,6 +9000,10 @@
 <pre>
 &lt;simpleType name="RDFAMetric">
 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+&lt;enumeration value="TotalTracksSpilledBack"/>
+&lt;enumeration value="TotalTracksSpilledOver"/>
+&lt;enumeration value="TotalTracksSpilledOverUsed"/>
+&lt;enumeration value="SpillOverPackedSlots"/>
 &lt;enumeration value="AvgCycleTime"/>
 &lt;enumeration value="LastCycleDuration"/>
 &lt;enumeration value="TotalHAWrites"/>
@@ -8589,6 +9073,7 @@
 &lt;enumeration value="MaxIOServiceTime"/>
 &lt;enumeration value="MinIOServiceTime"/>
 &lt;enumeration value="RdfResponseTime"/>
+&lt;enumeration value="NumberOfRDFInvalidTracks"/>
 &lt;enumeration value="ACTIVE_CYCLE_SIZE"/>
 &lt;enumeration value="AVG_CYCLE_SIZE"/>
 &lt;enumeration value="AVG_CYCLE_TIME"/>
@@ -8670,6 +9155,10 @@
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
+      <xs:enumeration value="TotalTracksSpilledBack"/>
+      <xs:enumeration value="TotalTracksSpilledOver"/>
+      <xs:enumeration value="TotalTracksSpilledOverUsed"/>
+      <xs:enumeration value="SpillOverPackedSlots"/>
       <xs:enumeration value="AvgCycleTime"/>
       <xs:enumeration value="LastCycleDuration"/>
       <xs:enumeration value="TotalHAWrites"/>
@@ -8739,6 +9228,7 @@
       <xs:enumeration value="MaxIOServiceTime"/>
       <xs:enumeration value="MinIOServiceTime"/>
       <xs:enumeration value="RdfResponseTime"/>
+      <xs:enumeration value="NumberOfRDFInvalidTracks"/>
       <xs:enumeration value="ACTIVE_CYCLE_SIZE"/>
       <xs:enumeration value="AVG_CYCLE_SIZE"/>
       <xs:enumeration value="AVG_CYCLE_TIME"/>
@@ -8849,6 +9339,8 @@
 &lt;enumeration value="SyncMBSent"/>
 &lt;enumeration value="AsyncWriteReqs"/>
 &lt;enumeration value="AsyncMBSent"/>
+&lt;enumeration value="TracksSentPerSec"/>
+&lt;enumeration value="TracksReceivedPerSec"/>
 &lt;enumeration value="AVG_KB_PER_IO_REC"/>
 &lt;enumeration value="AVG_KB_PER_IO_SENT"/>
 &lt;enumeration value="AVG_IO_SERVICE_TIME"/>
@@ -8915,6 +9407,8 @@
       <xs:enumeration value="SyncMBSent"/>
       <xs:enumeration value="AsyncWriteReqs"/>
       <xs:enumeration value="AsyncMBSent"/>
+      <xs:enumeration value="TracksSentPerSec"/>
+      <xs:enumeration value="TracksReceivedPerSec"/>
       <xs:enumeration value="AVG_KB_PER_IO_REC"/>
       <xs:enumeration value="AVG_KB_PER_IO_SENT"/>
       <xs:enumeration value="AVG_IO_SERVICE_TIME"/>
@@ -9042,6 +9536,7 @@
 <pre>
 &lt;simpleType name="RDFSMetric">
 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+&lt;enumeration value="SpillOverPackedSlots"/>
 &lt;enumeration value="HostIOs"/>
 &lt;enumeration value="HostReads"/>
 &lt;enumeration value="HostWrites"/>
@@ -9111,6 +9606,14 @@
 &lt;enumeration value="AvgOptimizedReadMissSize"/>
 &lt;enumeration value="WritePacedDelay"/>
 &lt;enumeration value="AvgWritePacedDelay"/>
+&lt;enumeration value="TotalCapacityGB"/>
+&lt;enumeration value="RdfWritesPerSec"/>
+&lt;enumeration value="RdfReadsPerSec"/>
+&lt;enumeration value="RdfRewritesPerSec"/>
+&lt;enumeration value="RdfReadHitsPerSec"/>
+&lt;enumeration value="RdfMBsWrittenPerSec"/>
+&lt;enumeration value="RdfMBsReadPerSec"/>
+&lt;enumeration value="RdfMBsReadPerSec"/>
 &lt;enumeration value="AVG_BE_DISK_TIME"/>
 &lt;enumeration value="AVG_BE_REQ_TIME"/>
 &lt;enumeration value="AVG_BE_TASK_TIME"/>
@@ -9234,6 +9737,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
+      <xs:enumeration value="SpillOverPackedSlots"/>
       <xs:enumeration value="HostIOs"/>
       <xs:enumeration value="HostReads"/>
       <xs:enumeration value="HostWrites"/>
@@ -9303,6 +9807,13 @@
       <xs:enumeration value="AvgOptimizedReadMissSize"/>
       <xs:enumeration value="WritePacedDelay"/>
       <xs:enumeration value="AvgWritePacedDelay"/>
+      <xs:enumeration value="TotalCapacityGB"/>
+      <xs:enumeration value="RdfWritesPerSec"/>
+      <xs:enumeration value="RdfReadsPerSec"/>
+      <xs:enumeration value="RdfRewritesPerSec"/>
+      <xs:enumeration value="RdfReadHitsPerSec"/>
+      <xs:enumeration value="RdfMBsWrittenPerSec"/>
+      <xs:enumeration value="RdfMBsReadPerSec"/>
       <xs:enumeration value="AVG_BE_DISK_TIME"/>
       <xs:enumeration value="AVG_BE_REQ_TIME"/>
       <xs:enumeration value="AVG_BE_TASK_TIME"/>
@@ -9551,7 +10062,6 @@
 &lt;element name="PercentBusy" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="IOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="Reqs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="ReadReqs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="WriteReqs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="MBWritten" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="MBRead" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -9564,7 +10074,6 @@
 &lt;element name="AvgTimePerSyscall" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="Rewrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="MBSentAndReceived" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="WriteMissReqs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgIOServiceTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="CopyIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="CopyMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -9608,6 +10117,8 @@
 &lt;element name="TOTAL_RDF_WRITES" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="WRITES" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="WRITE_MISS_PER_SEC" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="TracksReceivedPerSec" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="TracksSentPerSec" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;/sequence>
 &lt;attribute name="timestamp" use="required" type="{http://www.emc.com/em/2012/07/univmax/restapi/common}DateType" />
 &lt;/extension>
@@ -9622,7 +10133,6 @@
           <xs:element name="PercentBusy" type="xs:float" minOccurs="0"/>
           <xs:element name="IOs" type="xs:float" minOccurs="0"/>
           <xs:element name="Reqs" type="xs:float" minOccurs="0"/>
-          <xs:element name="ReadReqs" type="xs:float" minOccurs="0"/>
           <xs:element name="WriteReqs" type="xs:float" minOccurs="0"/>
           <xs:element name="MBWritten" type="xs:float" minOccurs="0"/>
           <xs:element name="MBRead" type="xs:float" minOccurs="0"/>
@@ -9635,7 +10145,6 @@
           <xs:element name="AvgTimePerSyscall" type="xs:float" minOccurs="0"/>
           <xs:element name="Rewrites" type="xs:float" minOccurs="0"/>
           <xs:element name="MBSentAndReceived" type="xs:float" minOccurs="0"/>
-          <xs:element name="WriteMissReqs" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgIOServiceTime" type="xs:float" minOccurs="0"/>
           <xs:element name="CopyIOs" type="xs:float" minOccurs="0"/>
           <xs:element name="CopyMBs" type="xs:float" minOccurs="0"/>
@@ -9677,6 +10186,8 @@
           <xs:element name="TOTAL_RDF_WRITES" type="xs:float" minOccurs="0"/>
           <xs:element name="WRITES" type="xs:float" minOccurs="0"/>
           <xs:element name="WRITE_MISS_PER_SEC" type="xs:float" minOccurs="0"/>
+          <xs:element name="TracksReceivedPerSec" type="xs:float" minOccurs="0"/>
+          <xs:element name="TracksSentPerSec" type="xs:float" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="timestamp" use="required" type="xs:long"/>
       </xs:extension>
@@ -10142,6 +10653,10 @@
 &lt;complexContent>
 &lt;extension base="{http://www.emc.com/em/2012/07/univmax/restapi/common}ResultType">
 &lt;sequence>
+&lt;element name="TotalTracksSpilledBack" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="TotalTracksSpilledOver" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="TotalTracksSpilledOverUsed" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="SpillOverPackedSlots" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgCycleTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="LastCycleDuration" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="TotalHAWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -10156,11 +10671,7 @@
 &lt;element name="SystemWPCount" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="LocalWPCount" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="RDFA_WPCount" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="Percent_RDFA_MaxCacheUsage" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="MinCycleTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="DSEUsedTracks" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="Percent_R1_UsedCache" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="Percent_R2_UsedCache" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="TotalReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="MBReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="TimeSinceLastSwitch" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -10168,21 +10679,15 @@
 &lt;element name="InactiveCycleSize" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="RDFA_SessionIndicator" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="RDFA_ActiveIndicator" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="SessionPriority" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="CycleNumber" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="HighWaterMark" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="R1_R2_LagTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="NumDevsInSession" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="R2_LastRestoreTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="R2_AvgRestoreTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="ConsistencyProtection" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="DSEThreshold" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="SessionNumber" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="UncommittedTracks" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="MBWritten" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="ReadHits" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="MaxCycleTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgIOServiceTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgCycleSize" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="NumberOfLinks" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -10193,10 +10698,6 @@
 &lt;element name="PercentCompressedMBReceived" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PercentCompressedMBSent" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PercentCompressedMBSentAndReceived" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="PercentXtremSWCacheReadHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedReadMisses" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedMBReadMisses" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgOptimizedReadMissSize" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -10204,7 +10705,6 @@
 &lt;element name="RdfWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="RdfMBRead" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="RdfMBWritten" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="RdfReadHits" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="RDFRewrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="IOServiceTimeLong" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="IOServiceTimeShort" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -10212,7 +10712,6 @@
 &lt;element name="MinIOServiceTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="RdfResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="ACTIVE_CYCLE_SIZE" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="AVG_CYCLE_SIZE" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_CYCLE_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_IO_SERVICE_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="COMP_MB_READ_PER_SEC" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -10240,7 +10739,7 @@
 &lt;element name="PERCENT_COMP_MB_READ" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PERCENT_COMP_MB_WRITTEN" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PERCENT_COMP_MB" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="R1_R2_LAG_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="R1_R2_Lag_Time" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="R2_AVG_RESTORE_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="R2_LAST_RESTORE_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="RDFA_MAX_CACHE_USAGE" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -10286,6 +10785,7 @@
 &lt;element name="ORM_READS" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="ORM_MB_READ" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="ORM_AVG_READ_SIZE" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="NumberOfRDFInvalidTracks" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;/sequence>
 &lt;attribute name="timestamp" use="required" type="{http://www.emc.com/em/2012/07/univmax/restapi/common}DateType" />
 &lt;/extension>
@@ -10297,6 +10797,10 @@
     <xs:complexContent>
       <xs:extension base="common:ResultType">
         <xs:sequence>
+          <xs:element name="TotalTracksSpilledBack" type="xs:float" minOccurs="0"/>
+          <xs:element name="TotalTracksSpilledOver" type="xs:float" minOccurs="0"/>
+          <xs:element name="TotalTracksSpilledOverUsed" type="xs:float" minOccurs="0"/>
+          <xs:element name="SpillOverPackedSlots" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgCycleTime" type="xs:float" minOccurs="0"/>
           <xs:element name="LastCycleDuration" type="xs:float" minOccurs="0"/>
           <xs:element name="TotalHAWrites" type="xs:float" minOccurs="0"/>
@@ -10311,11 +10815,7 @@
           <xs:element name="SystemWPCount" type="xs:float" minOccurs="0"/>
           <xs:element name="LocalWPCount" type="xs:float" minOccurs="0"/>
           <xs:element name="RDFA_WPCount" type="xs:float" minOccurs="0"/>
-          <xs:element name="Percent_RDFA_MaxCacheUsage" type="xs:float" minOccurs="0"/>
-          <xs:element name="MinCycleTime" type="xs:float" minOccurs="0"/>
           <xs:element name="DSEUsedTracks" type="xs:float" minOccurs="0"/>
-          <xs:element name="Percent_R1_UsedCache" type="xs:float" minOccurs="0"/>
-          <xs:element name="Percent_R2_UsedCache" type="xs:float" minOccurs="0"/>
           <xs:element name="TotalReads" type="xs:float" minOccurs="0"/>
           <xs:element name="MBReads" type="xs:float" minOccurs="0"/>
           <xs:element name="TimeSinceLastSwitch" type="xs:float" minOccurs="0"/>
@@ -10323,21 +10823,15 @@
           <xs:element name="InactiveCycleSize" type="xs:float" minOccurs="0"/>
           <xs:element name="RDFA_SessionIndicator" type="xs:float" minOccurs="0"/>
           <xs:element name="RDFA_ActiveIndicator" type="xs:float" minOccurs="0"/>
-          <xs:element name="SessionPriority" type="xs:float" minOccurs="0"/>
           <xs:element name="CycleNumber" type="xs:float" minOccurs="0"/>
-          <xs:element name="HighWaterMark" type="xs:float" minOccurs="0"/>
-          <xs:element name="R1_R2_LagTime" type="xs:float" minOccurs="0"/>
           <xs:element name="NumDevsInSession" type="xs:float" minOccurs="0"/>
           <xs:element name="R2_LastRestoreTime" type="xs:float" minOccurs="0"/>
-          <xs:element name="R2_AvgRestoreTime" type="xs:float" minOccurs="0"/>
-          <xs:element name="ConsistencyProtection" type="xs:float" minOccurs="0"/>
           <xs:element name="DSEThreshold" type="xs:float" minOccurs="0"/>
           <xs:element name="SessionNumber" type="xs:float" minOccurs="0"/>
           <xs:element name="UncommittedTracks" type="xs:float" minOccurs="0"/>
           <xs:element name="HostWrites" type="xs:float" minOccurs="0"/>
           <xs:element name="MBWritten" type="xs:float" minOccurs="0"/>
           <xs:element name="ReadHits" type="xs:float" minOccurs="0"/>
-          <xs:element name="MaxCycleTime" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgIOServiceTime" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgCycleSize" type="xs:float" minOccurs="0"/>
           <xs:element name="NumberOfLinks" type="xs:float" minOccurs="0"/>
@@ -10348,10 +10842,6 @@
           <xs:element name="PercentCompressedMBReceived" type="xs:float" minOccurs="0"/>
           <xs:element name="PercentCompressedMBSent" type="xs:float" minOccurs="0"/>
           <xs:element name="PercentCompressedMBSentAndReceived" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheIOs" type="xs:float" minOccurs="0"/>
-          <xs:element name="PercentXtremSWCacheReadHit" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheMBs" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedReadMisses" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedMBReadMisses" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgOptimizedReadMissSize" type="xs:float" minOccurs="0"/>
@@ -10359,7 +10849,6 @@
           <xs:element name="RdfWrites" type="xs:float" minOccurs="0"/>
           <xs:element name="RdfMBRead" type="xs:float" minOccurs="0"/>
           <xs:element name="RdfMBWritten" type="xs:float" minOccurs="0"/>
-          <xs:element name="RdfReadHits" type="xs:float" minOccurs="0"/>
           <xs:element name="RDFRewrites" type="xs:float" minOccurs="0"/>
           <xs:element name="IOServiceTimeLong" type="xs:float" minOccurs="0"/>
           <xs:element name="IOServiceTimeShort" type="xs:float" minOccurs="0"/>
@@ -10369,6 +10858,7 @@
           <xs:element name="COMP_MB_READ_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="COMP_MB_WRITE_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="COMP_MB_RATE" type="xs:float" minOccurs="0"/>
+          <xs:element name="CONSISTENCY_PROTECTION" type="xs:float" minOccurs="0"/>
           <xs:element name="CYCLE_NUM" type="xs:float" minOccurs="0"/>
           <xs:element name="DURATION_LAST_CYCLE" type="xs:float" minOccurs="0"/>
           <xs:element name="HIGHT_WATER_MARK" type="xs:float" minOccurs="0"/>
@@ -10376,6 +10866,7 @@
           <xs:element name="HOST_WRITE_MB_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="LOCAL_CACHE_USAGE" type="xs:float" minOccurs="0"/>
           <xs:element name="LOCAL_WP" type="xs:float" minOccurs="0"/>
+          <xs:element name="MAX_CYCLE_TIME" type="xs:float" minOccurs="0"/>
           <xs:element name="MB_WRITE_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="MB_READ_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="MIN_CYCLE" type="xs:float" minOccurs="0"/>
@@ -10386,6 +10877,8 @@
           <xs:element name="PERCENT_COMP_MB_READ" type="xs:float" minOccurs="0"/>
           <xs:element name="PERCENT_COMP_MB_WRITTEN" type="xs:float" minOccurs="0"/>
           <xs:element name="PERCENT_COMP_MB" type="xs:float" minOccurs="0"/>
+          <xs:element name="R1_R2_Lag_Time" type="xs:float" minOccurs="0"/>
+          <xs:element name="R2_AVG_RESTORE_TIME" type="xs:float" minOccurs="0"/>
           <xs:element name="RDFA_MAX_CACHE_USAGE" type="xs:float" minOccurs="0"/>
           <xs:element name="RDF_R1_R2_IO_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="RDF_R2_R1_IO_PER_SEC" type="xs:float" minOccurs="0"/>
@@ -10394,6 +10887,7 @@
           <xs:element name="READ_HIT_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="READS" type="xs:float" minOccurs="0"/>
           <xs:element name="SESSION_NUM" type="xs:float" minOccurs="0"/>
+          <xs:element name="SESSION_PRIORITY" type="xs:float" minOccurs="0"/>
           <xs:element name="SYS_WRITE_PENDING" type="xs:float" minOccurs="0"/>
           <xs:element name="TIME_LAST_SWITCH" type="xs:float" minOccurs="0"/>
           <xs:element name="TOTAL_CACHE_SLOT_IN_USE" type="xs:float" minOccurs="0"/>
@@ -10426,6 +10920,7 @@
           <xs:element name="ORM_READS" type="xs:float" minOccurs="0"/>
           <xs:element name="ORM_MB_READ" type="xs:float" minOccurs="0"/>
           <xs:element name="ORM_AVG_READ_SIZE" type="xs:float" minOccurs="0"/>
+          <xs:element name="NumberOfRDFInvalidTracks" type="xs:float" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="timestamp" use="required" type="xs:long"/>
       </xs:extension>
@@ -10557,6 +11052,7 @@
 &lt;complexContent>
 &lt;extension base="{http://www.emc.com/em/2012/07/univmax/restapi/common}ResultType">
 &lt;sequence>
+&lt;element name="SpillOverPackedSlots" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -10613,19 +11109,21 @@
 &lt;element name="PercentHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PercentMisses" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="ResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="UsedCapacity" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="BlockSize" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="BEPrefetchedMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="IODensity" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="PercentXtremSWCacheReadHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedReadMisses" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedMBReadMisss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgOptimizedReadMissSize" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="WritePacedDelay" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgWritePacedDelay" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="TotalCapacityGB" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfWritesPerSec" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfRewritesPerSec" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfReadsPerSec" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfReadHitsPerSec" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfMBsWrittenPerSec" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfMBsReadPerSec" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_BE_DISK_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_BE_REQ_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_BE_TASK_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -10754,6 +11252,7 @@
     <xs:complexContent>
       <xs:extension base="common:ResultType">
         <xs:sequence>
+          <xs:element name="SpillOverPackedSlots" type="xs:float" minOccurs="0"/>
           <xs:element name="HostIOs" type="xs:float" minOccurs="0"/>
           <xs:element name="HostReads" type="xs:float" minOccurs="0"/>
           <xs:element name="HostWrites" type="xs:float" minOccurs="0"/>
@@ -10810,19 +11309,21 @@
           <xs:element name="PercentHit" type="xs:float" minOccurs="0"/>
           <xs:element name="PercentMisses" type="xs:float" minOccurs="0"/>
           <xs:element name="ResponseTime" type="xs:float" minOccurs="0"/>
-          <xs:element name="UsedCapacity" type="xs:float" minOccurs="0"/>
           <xs:element name="BlockSize" type="xs:float" minOccurs="0"/>
           <xs:element name="BEPrefetchedMBs" type="xs:float" minOccurs="0"/>
           <xs:element name="IODensity" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheIOs" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheMBs" type="xs:float" minOccurs="0"/>
-          <xs:element name="PercentXtremSWCacheReadHit" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedReadMisses" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedMBReadMisss" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgOptimizedReadMissSize" type="xs:float" minOccurs="0"/>
           <xs:element name="WritePacedDelay" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgWritePacedDelay" type="xs:float" minOccurs="0"/>
+          <xs:element name="TotalCapacityGB" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfWritesPerSec" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfRewritesPerSec" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfReadsPerSec" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfReadHitsPerSec" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfMBsWrittenPerSec" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfMBsReadPerSec" type="xs:float" minOccurs="0"/>
           <xs:element name="AVG_BE_DISK_TIME" type="xs:float" minOccurs="0"/>
           <xs:element name="AVG_BE_REQ_TIME" type="xs:float" minOccurs="0"/>
           <xs:element name="AVG_BE_TASK_TIME" type="xs:float" minOccurs="0"/>
@@ -10967,6 +11468,16 @@
 <pre>
 &lt;simpleType name="SRPMetric">
 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+&lt;enumeration value="OverallEfficiencyRatio"/>
+&lt;enumeration value="OverallCompressionRatio"/>
+&lt;enumeration value="PercentVPSaved"/>
+&lt;enumeration value="VPSharedRatio"/>
+&lt;enumeration value="VPCompressionRatio"/>
+&lt;enumeration value="VPEfficiencyRatio"/>
+&lt;enumeration value="PercentSnapshotSaved"/>
+&lt;enumeration value="SnapshotSharedRatio"/>
+&lt;enumeration value="SnapshotCompressionRatio"/>
+&lt;enumeration value="SnapshotEfficiencyRatio"/>
 &lt;enumeration value="HostIOs"/>
 &lt;enumeration value="HostReads"/>
 &lt;enumeration value="HostWrites"/>
@@ -10988,6 +11499,16 @@
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
+      <xs:enumeration value="OverallEfficiencyRatio"/>
+      <xs:enumeration value="OverallCompressionRatio"/>
+      <xs:enumeration value="PercentVPSaved"/>
+      <xs:enumeration value="VPSharedRatio"/>
+      <xs:enumeration value="VPCompressionRatio"/>
+      <xs:enumeration value="VPEfficiencyRatio"/>
+      <xs:enumeration value="PercentSnapshotSaved"/>
+      <xs:enumeration value="SnapshotSharedRatio"/>
+      <xs:enumeration value="SnapshotCompressionRatio"/>
+      <xs:enumeration value="SnapshotEfficiencyRatio"/>
       <xs:enumeration value="HostIOs"/>
       <xs:enumeration value="HostReads"/>
       <xs:enumeration value="HostWrites"/>
@@ -11338,6 +11859,16 @@
 &lt;element name="ResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="ReadResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="WriteResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="OverallEfficiencyRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="OverallCompressionRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentVPSaved" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="VPSharedRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="VPCompressionRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="VPEfficiencyRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSnapshotSaved" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="SnapshotSharedRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="SnapshotCompressionRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="SnapshotEfficiencyRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;/sequence>
 &lt;attribute name="timestamp" use="required" type="{http://www.emc.com/em/2012/07/univmax/restapi/common}DateType" />
 &lt;/extension>
@@ -11364,6 +11895,16 @@
           <xs:element name="ResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="ReadResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="WriteResponseTime" type="xs:float" minOccurs="0"/>
+          <xs:element name="OverallEfficiencyRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="OverallCompressionRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentVPSaved" type="xs:float" minOccurs="0"/>
+          <xs:element name="VPSharedRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="VPCompressionRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="VPEfficiencyRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSnapshotSaved" type="xs:float" minOccurs="0"/>
+          <xs:element name="SnapshotSharedRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="SnapshotCompressionRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="SnapshotEfficiencyRatio" type="xs:float" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="timestamp" use="required" type="xs:long"/>
       </xs:extension>
@@ -11453,6 +11994,51 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  <xs:simpleType name="StorageGroupByPoolMetric">
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[<p>Java class for StorageGroupByPoolMetric.
+<p>The following schema fragment specifies the expected content contained within this class.
+<p>
+<pre>
+&lt;simpleType name="StorageGroupByPoolMetric">
+&lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+&lt;enumeration value="LocalRepTracks"/>
+&lt;enumeration value="BEReadReqs"/>
+&lt;enumeration value="BEMBReads"/>
+&lt;enumeration value="PrefetchedTracks"/>
+&lt;enumeration value="PrefetchedMBs"/>
+&lt;enumeration value="DestageWrites"/>
+&lt;enumeration value="DestageWriteMBs"/>
+&lt;enumeration value="AllocatedCapacity"/>
+&lt;enumeration value="BEReqs"/>
+&lt;enumeration value="BEMBTransferred"/>
+&lt;enumeration value="IODensity"/>
+&lt;enumeration value="TotalTracks"/>
+&lt;enumeration value="CompressedTracks"/>
+&lt;enumeration value="PercentCompressedTracks"/>
+&lt;/restriction>
+&lt;/simpleType>
+</pre>]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="LocalRepTracks"/>
+      <xs:enumeration value="BEReadReqs"/>
+      <xs:enumeration value="BEMBReads"/>
+      <xs:enumeration value="PrefetchedTracks"/>
+      <xs:enumeration value="PrefetchedMBs"/>
+      <xs:enumeration value="DestageWrites"/>
+      <xs:enumeration value="DestageWriteMBs"/>
+      <xs:enumeration value="AllocatedCapacity"/>
+      <xs:enumeration value="BEReqs"/>
+      <xs:enumeration value="BEMBTransferred"/>
+      <xs:enumeration value="IODensity"/>
+      <xs:enumeration value="TotalTracks"/>
+      <xs:enumeration value="CompressedTracks"/>
+      <xs:enumeration value="PercentCompressedTracks"/>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:complexType name="StorageGroupByPoolParamType">
     <xs:annotation>
       <xs:documentation>
@@ -11470,7 +12056,7 @@
 &lt;element name="poolId" type="{http://www.emc.com/em/2012/07/univmax/restapi/common}PoolIdType"/>
 &lt;element name="dataFormat" type="{http://www.emc.com/em/2012/07/univmax/restapi/performance}DataFormat" minOccurs="0"/>
 &lt;sequence maxOccurs="unbounded">
-&lt;element name="metrics" type="{http://www.emc.com/em/2012/07/univmax/restapi/performance}StorageGroupByTierMetric"/>
+&lt;element name="metrics" type="{http://www.emc.com/em/2012/07/univmax/restapi/performance}StorageGroupByPoolMetric"/>
 &lt;/sequence>
 &lt;/sequence>
 &lt;/extension>
@@ -11488,7 +12074,7 @@
           <xs:element name="storageGroupId" type="xs:string" minOccurs="1"/>
           <xs:element name="poolId" type="xs:string" minOccurs="1"/>
           <xs:element name="dataFormat" type="performance:DataFormat" minOccurs="0"/>
-          <xs:element name="metrics" type="performance:StorageGroupByTierMetric" minOccurs="1" maxOccurs="unbounded"/>
+          <xs:element name="metrics" type="performance:StorageGroupByPoolMetric" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -11503,6 +12089,7 @@
 &lt;complexContent>
 &lt;extension base="{http://www.emc.com/em/2012/07/univmax/restapi/common}ResultType">
 &lt;sequence>
+&lt;element name="LocalRepTracks" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="BEReadReqs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="BEMBReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PrefetchedTracks" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -11527,6 +12114,7 @@
     <xs:complexContent>
       <xs:extension base="common:ResultType">
         <xs:sequence>
+          <xs:element name="LocalRepTracks" type="xs:float" minOccurs="0"/>
           <xs:element name="BEReadReqs" type="xs:float" minOccurs="0"/>
           <xs:element name="BEMBReads" type="xs:float" minOccurs="0"/>
           <xs:element name="PrefetchedTracks" type="xs:float" minOccurs="0"/>
@@ -11582,6 +12170,7 @@
 <pre>
 &lt;simpleType name="StorageGroupByTierMetric">
 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+&lt;enumeration value="LocalRepTracks"/>
 &lt;enumeration value="BEReadReqs"/>
 &lt;enumeration value="BEMBReads"/>
 &lt;enumeration value="PrefetchedTracks"/>
@@ -11614,6 +12203,7 @@
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
+      <xs:enumeration value="LocalRepTracks"/>
       <xs:enumeration value="BEReadReqs"/>
       <xs:enumeration value="BEMBReads"/>
       <xs:enumeration value="PrefetchedTracks"/>
@@ -11724,6 +12314,7 @@
 &lt;complexContent>
 &lt;extension base="{http://www.emc.com/em/2012/07/univmax/restapi/common}ResultType">
 &lt;sequence>
+&lt;element name="LocalRepTracks" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="BEReadReqs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="BEMBReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PrefetchedTracks" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -11761,6 +12352,7 @@
     <xs:complexContent>
       <xs:extension base="common:ResultType">
         <xs:sequence>
+          <xs:element name="LocalRepTracks" type="xs:float" minOccurs="0"/>
           <xs:element name="BEReadReqs" type="xs:float" minOccurs="0"/>
           <xs:element name="BEMBReads" type="xs:float" minOccurs="0"/>
           <xs:element name="PrefetchedTracks" type="xs:float" minOccurs="0"/>
@@ -11876,6 +12468,35 @@
 <pre>
 &lt;simpleType name="StorageGroupMetric">
 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+&lt;enumeration value="PercentRandomIO"/>
+&lt;enumeration value="PercentRandomReadHit"/>
+&lt;enumeration value="PercentRandomReadMiss"/>
+&lt;enumeration value="PercentRandomWriteHit"/>
+&lt;enumeration value="PercentRandomWriteMiss"/>
+&lt;enumeration value="PercentRandomReads"/>
+&lt;enumeration value="PercentRandomWrites"/>
+&lt;enumeration value="PercentRandomWriteHit"/>
+&lt;enumeration value="PercentVPSpaceSaved"/>
+&lt;enumeration value="CompressionRatio"/>
+&lt;enumeration value="AvgReadResponseTime6"/>
+&lt;enumeration value="AvgReadResponseTime7"/>
+&lt;enumeration value="AvgWriteResponseTime6"/>
+&lt;enumeration value="AvgWriteResponseTime7"/>
+&lt;enumeration value="ReadResponseTimeCount1"/>
+&lt;enumeration value="ReadResponseTimeCount2"/>
+&lt;enumeration value="ReadResponseTimeCount3"/>
+&lt;enumeration value="ReadResponseTimeCount4"/>
+&lt;enumeration value="ReadResponseTimeCount5"/>
+&lt;enumeration value="ReadResponseTimeCount6"/>
+&lt;enumeration value="ReadResponseTimeCount7"/>
+&lt;enumeration value="WriteResponseTimeCount1"/>
+&lt;enumeration value="WriteResponseTimeCount2"/>
+&lt;enumeration value="WriteResponseTimeCount3"/>
+&lt;enumeration value="WriteResponseTimeCount4"/>
+&lt;enumeration value="WriteResponseTimeCount5"/>
+&lt;enumeration value="WriteResponseTimeCount6"/>
+&lt;enumeration value="WriteResponseTimeCount7"/>
+&lt;enumeration value="Skew"/>
 &lt;enumeration value="HostIOs"/>
 &lt;enumeration value="HostReads"/>
 &lt;enumeration value="HostWrites"/>
@@ -11955,6 +12576,18 @@
 &lt;enumeration value="SRDFS_MBSent"/>
 &lt;enumeration value="SRDFA_WriteReqs"/>
 &lt;enumeration value="SRDFA_MBSent"/>
+&lt;enumeration value="HostIOLimitPercentTimeExceeded"/>
+&lt;enumeration value="RdfReads"/>
+&lt;enumeration value="RdfWrites"/>
+&lt;enumeration value="RdfMBRead"/>
+&lt;enumeration value="RdfMBWritten"/>
+&lt;enumeration value="RdfReadHits"/>
+&lt;enumeration value="RDFRewrites"/>
+&lt;enumeration value="IOServiceTimeLong"/>
+&lt;enumeration value="IOServiceTimeShort"/>
+&lt;enumeration value="MaxIOServiceTime"/>
+&lt;enumeration value="MinIOServiceTime"/>
+&lt;enumeration value="RdfResponseTime"/>
 &lt;enumeration value="ALLOCATED_TRACKS"/>
 &lt;enumeration value="AVG_BE_DISK_TIME"/>
 &lt;enumeration value="AVG_BE_REQ_TIME"/>
@@ -12082,14 +12715,49 @@
 &lt;enumeration value="DISK_WORKLOAD_SCORE"/>
 &lt;enumeration value="WORKLOAD_SCORE"/>
 &lt;enumeration value="RESPONSE_TIME"/>
-&lt;enumeration value="WRITE_PACED_DELAY"/>
-&lt;enumeration value="AVG_WRITE_PACED_DELAY"/>
+&lt;enumeration value="PercentSeqIO"/>
+&lt;enumeration value="PercentSeqRead"/>
+&lt;enumeration value="PercentSeqReadHit"/>
+&lt;enumeration value="PercentSeqReadMiss"/>
+&lt;enumeration value="PercentSeqWriteHit"/>
+&lt;enumeration value="PercentSeqWriteMiss"/>
+&lt;enumeration value="PercentSeqWrites"/>
+&lt;enumeration value="BEPercentReads"/>
+&lt;enumeration value="BEPercentWrites"/>
 &lt;/restriction>
 &lt;/simpleType>
 </pre>]]>
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
+      <xs:enumeration value="PercentRandomIO"/>
+      <xs:enumeration value="PercentRandomReadHit"/>
+      <xs:enumeration value="PercentRandomReadMiss"/>
+      <xs:enumeration value="PercentRandomWriteHit"/>
+      <xs:enumeration value="PercentRandomWriteMiss"/>
+      <xs:enumeration value="PercentRandomReads"/>
+      <xs:enumeration value="PercentRandomWrites"/>
+      <xs:enumeration value="PercentVPSpaceSaved"/>
+      <xs:enumeration value="CompressionRatio"/>
+      <xs:enumeration value="AvgReadResponseTime6"/>
+      <xs:enumeration value="AvgReadResponseTime7"/>
+      <xs:enumeration value="AvgWriteResponseTime6"/>
+      <xs:enumeration value="AvgWriteResponseTime7"/>
+      <xs:enumeration value="ReadResponseTimeCount1"/>
+      <xs:enumeration value="ReadResponseTimeCount2"/>
+      <xs:enumeration value="ReadResponseTimeCount3"/>
+      <xs:enumeration value="ReadResponseTimeCount4"/>
+      <xs:enumeration value="ReadResponseTimeCount5"/>
+      <xs:enumeration value="ReadResponseTimeCount6"/>
+      <xs:enumeration value="ReadResponseTimeCount7"/>
+      <xs:enumeration value="WriteResponseTimeCount1"/>
+      <xs:enumeration value="WriteResponseTimeCount2"/>
+      <xs:enumeration value="WriteResponseTimeCount3"/>
+      <xs:enumeration value="WriteResponseTimeCount4"/>
+      <xs:enumeration value="WriteResponseTimeCount5"/>
+      <xs:enumeration value="WriteResponseTimeCount6"/>
+      <xs:enumeration value="WriteResponseTimeCount7"/>
+      <xs:enumeration value="Skew"/>
       <xs:enumeration value="HostIOs"/>
       <xs:enumeration value="HostReads"/>
       <xs:enumeration value="HostWrites"/>
@@ -12169,6 +12837,18 @@
       <xs:enumeration value="SRDFS_MBSent"/>
       <xs:enumeration value="SRDFA_WriteReqs"/>
       <xs:enumeration value="SRDFA_MBSent"/>
+      <xs:enumeration value="HostIOLimitPercentTimeExceeded"/>
+      <xs:enumeration value="RdfReads"/>
+      <xs:enumeration value="RdfWrites"/>
+      <xs:enumeration value="RdfMBRead"/>
+      <xs:enumeration value="RdfMBWritten"/>
+      <xs:enumeration value="RdfReadHits"/>
+      <xs:enumeration value="RDFRewrites"/>
+      <xs:enumeration value="IOServiceTimeLong"/>
+      <xs:enumeration value="IOServiceTimeShort"/>
+      <xs:enumeration value="MaxIOServiceTime"/>
+      <xs:enumeration value="MinIOServiceTime"/>
+      <xs:enumeration value="RdfResponseTime"/>
       <xs:enumeration value="ALLOCATED_TRACKS"/>
       <xs:enumeration value="AVG_BE_DISK_TIME"/>
       <xs:enumeration value="AVG_BE_REQ_TIME"/>
@@ -12296,8 +12976,15 @@
       <xs:enumeration value="DISK_WORKLOAD_SCORE"/>
       <xs:enumeration value="WORKLOAD_SCORE"/>
       <xs:enumeration value="RESPONSE_TIME"/>
-      <xs:enumeration value="WRITE_PACED_DELAY"/>
-      <xs:enumeration value="AVG_WRITE_PACED_DELAY"/>
+      <xs:enumeration value="PercentSeqIO"/>
+      <xs:enumeration value="PercentSeqRead"/>
+      <xs:enumeration value="PercentSeqReadHit"/>
+      <xs:enumeration value="PercentSeqReadMiss"/>
+      <xs:enumeration value="PercentSeqWriteHit"/>
+      <xs:enumeration value="PercentSeqWriteMiss"/>
+      <xs:enumeration value="PercentSeqWrites"/>
+      <xs:enumeration value="BEPercentReads"/>
+      <xs:enumeration value="BEPercentWrites"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="StorageGroupParamType">
@@ -12348,6 +13035,25 @@
 &lt;complexContent>
 &lt;extension base="{http://www.emc.com/em/2012/07/univmax/restapi/common}ResultType">
 &lt;sequence>
+&lt;element name="AvgReadResponseTime6" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="AvgReadResponseTime7" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="AvgWriteResponseTime6" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="AvgWriteResponseTime7" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount1" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount2" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount3" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount4" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount5" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount6" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="ReadResponseTimeCount7" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount1" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount2" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount3" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount4" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount5" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount6" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="WriteResponseTimeCount7" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="Skew" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -12408,10 +13114,6 @@
 &lt;element name="BlockSize" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="BEPrefetchedMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="IODensity" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="PercentXtremSWCacheReadHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedReadMisses" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedMBReadMisss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgOptimizedReadMissSize" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -12427,6 +13129,18 @@
 &lt;element name="SRDFS_MBSent" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="SRDFA_WriteReqs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="SRDFA_MBSent" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="HostIOLimitPercentTimeExceeded" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfMBRead" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfMBWritten" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfReadHits" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RDFRewrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="IOServiceTimeLong" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="IOServiceTimeShort" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="MaxIOServiceTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="MinIOServiceTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="RdfResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_BE_DISK_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_BE_REQ_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_BE_TASK_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -12556,6 +13270,24 @@
 &lt;element name="RESPONSE_TIME" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="WRITE_PACED_DELAY" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AVG_WRITE_PACED_DELAY" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentVPSpaceSaved" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="CompressionRatio" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqIO" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqRead" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqReadHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqReadMiss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqWriteHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqWriteMiss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentSeqWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomIO" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomReadHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomReadMiss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomWriteHit" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="PercentRandomWriteMiss" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="BEPercentReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="BEPercentWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;/sequence>
 &lt;attribute name="timestamp" use="required" type="{http://www.emc.com/em/2012/07/univmax/restapi/common}DateType" />
 &lt;/extension>
@@ -12567,6 +13299,25 @@
     <xs:complexContent>
       <xs:extension base="common:ResultType">
         <xs:sequence>
+          <xs:element name="AvgReadResponseTime6" type="xs:float" minOccurs="0"/>
+          <xs:element name="AvgReadResponseTime7" type="xs:float" minOccurs="0"/>
+          <xs:element name="AvgWriteResponseTime6" type="xs:float" minOccurs="0"/>
+          <xs:element name="AvgWriteResponseTime7" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount1" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount2" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount3" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount4" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount5" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount6" type="xs:float" minOccurs="0"/>
+          <xs:element name="ReadResponseTimeCount7" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount1" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount2" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount3" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount4" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount5" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount6" type="xs:float" minOccurs="0"/>
+          <xs:element name="WriteResponseTimeCount7" type="xs:float" minOccurs="0"/>
+          <xs:element name="Skew" type="xs:float" minOccurs="0"/>
           <xs:element name="HostIOs" type="xs:float" minOccurs="0"/>
           <xs:element name="HostReads" type="xs:float" minOccurs="0"/>
           <xs:element name="HostWrites" type="xs:float" minOccurs="0"/>
@@ -12627,10 +13378,6 @@
           <xs:element name="BlockSize" type="xs:float" minOccurs="0"/>
           <xs:element name="BEPrefetchedMBs" type="xs:float" minOccurs="0"/>
           <xs:element name="IODensity" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheIOs" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheMBs" type="xs:float" minOccurs="0"/>
-          <xs:element name="PercentXtremSWCacheReadHit" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedReadMisses" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedMBReadMisss" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgOptimizedReadMissSize" type="xs:float" minOccurs="0"/>
@@ -12646,6 +13393,18 @@
           <xs:element name="SRDFS_MBSent" type="xs:float" minOccurs="0"/>
           <xs:element name="SRDFA_WriteReqs" type="xs:float" minOccurs="0"/>
           <xs:element name="SRDFA_MBSent" type="xs:float" minOccurs="0"/>
+          <xs:element name="HostIOLimitPercentTimeExceeded" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfReads" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfWrites" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfMBRead" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfMBWritten" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfReadHits" type="xs:float" minOccurs="0"/>
+          <xs:element name="RDFRewrites" type="xs:float" minOccurs="0"/>
+          <xs:element name="IOServiceTimeLong" type="xs:float" minOccurs="0"/>
+          <xs:element name="IOServiceTimeShort" type="xs:float" minOccurs="0"/>
+          <xs:element name="MaxIOServiceTime" type="xs:float" minOccurs="0"/>
+          <xs:element name="MinIOServiceTime" type="xs:float" minOccurs="0"/>
+          <xs:element name="RdfResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="AVG_BE_DISK_TIME" type="xs:float" minOccurs="0"/>
           <xs:element name="AVG_BE_REQ_TIME" type="xs:float" minOccurs="0"/>
           <xs:element name="AVG_BE_TASK_TIME" type="xs:float" minOccurs="0"/>
@@ -12760,6 +13519,11 @@
           <xs:element name="BE_WORKLOAD_SCORE" type="xs:float" minOccurs="0"/>
           <xs:element name="DISK_WORKLOAD_SCORE" type="xs:float" minOccurs="0"/>
           <xs:element name="WORKLOAD_SCORE" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentVPSpaceSaved" type="xs:float" minOccurs="0"/>
+          <xs:element name="CompressionRatio" type="xs:float" minOccurs="0"/>
+          <xs:element name="PercentSeqRead" type="xs:float" minOccurs="0"/>
+          <xs:element name="BEPercentReads" type="xs:float" minOccurs="0"/>
+          <xs:element name="BEPercentWrites" type="xs:float" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="timestamp" use="required" type="xs:long"/>
       </xs:extension>
@@ -13055,6 +13819,8 @@
 <pre>
 &lt;simpleType name="ThinPoolMetric">
 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+&lt;enumeration value="ReDirectOnWrite"/>
+&lt;enumeration value="CopyOnWrite"/>
 &lt;enumeration value="HostIOs"/>
 &lt;enumeration value="HostReads"/>
 &lt;enumeration value="HostWrites"/>
@@ -13166,12 +13932,21 @@
 &lt;enumeration value="SAMPLED_AVG_RDF_WRITE_TIME"/>
 &lt;enumeration value="SAMPLED_AVG_READ_MISS_TIME"/>
 &lt;enumeration value="SAMPLED_AVG_WP_DISCONNECT_TIME"/>
+&lt;enumeration value="BEPercentReads"/>
+&lt;enumeration value="BEPercentWrites"/>
+&lt;enumeration value="BEWriteReqs"/>
+&lt;enumeration value="IODensity"/>
+&lt;enumeration value="BEPrefetchedTracks"/>
+&lt;enumeration value="BEPrefetchedTrackUsed"/>
+&lt;enumeration value="CompressionScanReads"/>
 &lt;/restriction>
 &lt;/simpleType>
 </pre>]]>
       </xs:documentation>
     </xs:annotation>
     <xs:restriction base="xs:string">
+      <xs:enumeration value="ReDirectOnWrite"/>
+      <xs:enumeration value="CopyOnWrite"/>
       <xs:enumeration value="HostIOs"/>
       <xs:enumeration value="HostReads"/>
       <xs:enumeration value="HostWrites"/>
@@ -13282,6 +14057,12 @@
       <xs:enumeration value="SAMPLED_AVG_RDF_WRITE_TIME"/>
       <xs:enumeration value="SAMPLED_AVG_READ_MISS_TIME"/>
       <xs:enumeration value="SAMPLED_AVG_WP_DISCONNECT_TIME"/>
+      <xs:enumeration value="BEPercentReads"/>
+      <xs:enumeration value="BEPercentWrites"/>
+      <xs:enumeration value="IODensity"/>
+      <xs:enumeration value="BEPrefetchedTracks"/>
+      <xs:enumeration value="BEPrefetchedTrackUsed"/>
+      <xs:enumeration value="CompressionScanReads"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="ThinPoolParamType">
@@ -13332,6 +14113,8 @@
 &lt;complexContent>
 &lt;extension base="{http://www.emc.com/em/2012/07/univmax/restapi/common}ResultType">
 &lt;sequence>
+&lt;element name="ReDirectOnWrite" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="CopyOnWrite" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="HostWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -13376,10 +14159,6 @@
 &lt;element name="EnabledPoolCapacity" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="UsedPoolCapacity" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AllocatedPoolCapacity" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="PercentXtremSWCacheReadHits" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedReadMisses" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedMBReadMisses" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgOptimizedReadMissSize" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -13442,7 +14221,11 @@
 &lt;element name="XC_AVG_IO_SIZE" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="ORM_READS" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="ORM_MB_READ" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="ORM_AVG_READ_SIZE" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="BEPercentReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="BEPercentWrites" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="CompressionScanReads" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="BEPrefetchedTrackUsed" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="BEPrefetchedTracks" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;/sequence>
 &lt;attribute name="timestamp" use="required" type="{http://www.emc.com/em/2012/07/univmax/restapi/common}DateType" />
 &lt;/extension>
@@ -13454,6 +14237,8 @@
     <xs:complexContent>
       <xs:extension base="common:ResultType">
         <xs:sequence>
+          <xs:element name="ReDirectOnWrite" type="xs:float" minOccurs="0"/>
+          <xs:element name="CopyOnWrite" type="xs:float" minOccurs="0"/>
           <xs:element name="HostIOs" type="xs:float" minOccurs="0"/>
           <xs:element name="HostReads" type="xs:float" minOccurs="0"/>
           <xs:element name="HostWrites" type="xs:float" minOccurs="0"/>
@@ -13498,10 +14283,6 @@
           <xs:element name="EnabledPoolCapacity" type="xs:float" minOccurs="0"/>
           <xs:element name="UsedPoolCapacity" type="xs:float" minOccurs="0"/>
           <xs:element name="AllocatedPoolCapacity" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheIOs" type="xs:float" minOccurs="0"/>
-          <xs:element name="PercentXtremSWCacheReadHits" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheMBs" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedReadMisses" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedMBReadMisses" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgOptimizedReadMissSize" type="xs:float" minOccurs="0"/>
@@ -13558,7 +14339,11 @@
           <xs:element name="XC_AVG_IO_SIZE" type="xs:float" minOccurs="0"/>
           <xs:element name="ORM_READS" type="xs:float" minOccurs="0"/>
           <xs:element name="ORM_MB_READ" type="xs:float" minOccurs="0"/>
-          <xs:element name="ORM_AVG_READ_SIZE" type="xs:float" minOccurs="0"/>
+          <xs:element name="BEPercentReads" type="xs:float" minOccurs="0"/>
+          <xs:element name="BEPercentWrites" type="xs:float" minOccurs="0"/>
+          <xs:element name="CompressionScanReads" type="xs:float" minOccurs="0"/>
+          <xs:element name="BEPrefetchedTrackUsed" type="xs:float" minOccurs="0"/>
+          <xs:element name="BEPrefetchedTracks" type="xs:float" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="timestamp" use="required" type="xs:long"/>
       </xs:extension>
@@ -13872,10 +14657,6 @@
 &lt;element name="EnabledPoolCapacity" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="UsedPoolCapacity" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AllocatedPoolCapacity" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheIOs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="PercentXtremSWCacheReadHits" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheMBs" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
-&lt;element name="XtremSWCacheResponseTime" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedReadMisses" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="OptimizedMBReadMisses" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="AvgOptimizedReadMissSize" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
@@ -13970,10 +14751,6 @@
           <xs:element name="EnabledPoolCapacity" type="xs:float" minOccurs="0"/>
           <xs:element name="UsedPoolCapacity" type="xs:float" minOccurs="0"/>
           <xs:element name="AllocatedPoolCapacity" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheIOs" type="xs:float" minOccurs="0"/>
-          <xs:element name="PercentXtremSWCacheReadHits" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheMBs" type="xs:float" minOccurs="0"/>
-          <xs:element name="XtremSWCacheResponseTime" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedReadMisses" type="xs:float" minOccurs="0"/>
           <xs:element name="OptimizedMBReadMisses" type="xs:float" minOccurs="0"/>
           <xs:element name="AvgOptimizedReadMissSize" type="xs:float" minOccurs="0"/>
@@ -14075,6 +14852,7 @@
 &lt;enumeration value="ALLOCATED_TRACKS"/>
 &lt;enumeration value="COMPRESSED_TRACKS"/>
 &lt;enumeration value="PERCENT_COMPRESSED_TRACKS"/>
+&lt;enumeration value="LocalRepTracks "/>
 &lt;/restriction>
 &lt;/simpleType>
 </pre>]]>
@@ -14107,6 +14885,7 @@
       <xs:enumeration value="ALLOCATED_TRACKS"/>
       <xs:enumeration value="COMPRESSED_TRACKS"/>
       <xs:enumeration value="PERCENT_COMPRESSED_TRACKS"/>
+      <xs:enumeration value="LocalRepTracks "/>
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="TierByStorageGroupParamType">
@@ -14217,6 +14996,7 @@
 &lt;element name="ALLOCATED_TRACKS" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="COMPRESSED_TRACKS" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;element name="PERCENT_COMPRESSED_TRACKS" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
+&lt;element name="LocalRepTracks" type="{http://www.w3.org/2001/XMLSchema}float" minOccurs="0"/>
 &lt;/sequence>
 &lt;attribute name="timestamp" use="required" type="{http://www.emc.com/em/2012/07/univmax/restapi/common}DateType" />
 &lt;/extension>
@@ -14251,6 +15031,7 @@
           <xs:element name="PREFETCHED_TRACKS_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="PREFETCHED_MBYTES_PER_SEC" type="xs:float" minOccurs="0"/>
           <xs:element name="ALLOCATED_TRACKS" type="xs:float" minOccurs="0"/>
+          <xs:element name="LocalRepTracks" type="xs:float" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="timestamp" use="required" type="xs:long"/>
       </xs:extension>
