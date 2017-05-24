@@ -36,6 +36,7 @@ def get_keys(unisphere,payload,monitor,auth)
   else
     rest = rest_post(payload.to_json,"https://#{unisphere['ip']}:#{unisphere['port']}/univmax/restapi/performance/#{monitor['scope']}/keys", auth)
   end
+  puts rest
   componentId = get_component_id_payload(monitor['scope'])
   output = rest["#{componentId}Info"] if unisphere['version'] == 8
   output = rest["#{componentId}KeyResult"]["#{componentId}Info"] if unisphere['version'] == 7
@@ -89,6 +90,7 @@ end
 ################################################################################
 def get_perf_metrics(unisphere,payload,monitor,auth)
   rest = rest_post(payload.to_json,"https://#{unisphere['ip']}:#{unisphere['port']}/univmax/restapi/performance/#{monitor['scope']}/metrics", auth)
+  puts rest
   output = rest['resultList']['result'][0] if unisphere['version'] == 8
   output = rest['iterator']['resultList']['result'][0] if unisphere['version'] == 7
   puts output
@@ -230,8 +232,8 @@ config['unisphere'].each do |unisphere|
               #puts "this is metrics"
               #puts metrics
               metrics_param.each do |metric|
-                puts "this is metrics[metric]"
-                puts metrics[metric]
+                #puts "this is metrics[metric]"
+                #puts metrics[metric]
                 influx_output_payload.push({series: metric, tags: { array_type: 'symmetrix', sn: symmetrix['sid'], component: monitor['scope'], component_name: key[parent_ids[0]], child_component_name: child_key[child_ids[0]]}, values: { value: metrics[metric] } } )
                 graphite_output_payload[(config['graphite']['prefix'] ? "#{config['graphite']['prefix']}." : "") + "symmetrix.#{symmetrix['sid']}.#{monitor['scope']}.#{key[parent_ids[0]]}.#{child_key[child_ids[0]]}.#{metric}"] = metrics[metric]
               end
