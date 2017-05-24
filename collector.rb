@@ -227,7 +227,8 @@ config['unisphere'].each do |unisphere|
               metrics_param = get_metrics(monitor['children'][0]['scope'],myparams)
               metric_payload = build_metric_payload(unisphere,monitor,symmetrix,metrics_param,key,parent_ids,child_key,child_ids)
               metrics = get_perf_metrics(unisphere,metric_payload,monitor['children'][0],auth)
-              puts "this is metrics" + metrics
+              puts "this is metrics"
+              puts metrics
               metrics_param.each do |metric|
                 influx_output_payload.push({series: metric, tags: { array_type: 'symmetrix', sn: symmetrix['sid'], component: monitor['scope'], component_name: key[parent_ids[0]], child_component_name: child_key[child_ids[0]]}, values: { value: metrics[metric] } } )
                 graphite_output_payload[(config['graphite']['prefix'] ? "#{config['graphite']['prefix']}." : "") + "symmetrix.#{symmetrix['sid']}.#{monitor['scope']}.#{key[parent_ids[0]]}.#{child_key[child_ids[0]]}.#{metric}"] = metrics[metric]
