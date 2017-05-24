@@ -3,3 +3,4 @@
 *.lock
 *.swp
 /rubyinstaller
+settings.json.example
