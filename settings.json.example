@@ -37,11 +37,11 @@
 		},
 		{
 			"scope": "FEDirector",
-			"enabled": false,
+			"enabled": true,
 			"children": [
 				{
 					"scope": "FEDirectorByPort",
-					"enabled": false
+					"enabled": true
 				}
 			]
 		},
