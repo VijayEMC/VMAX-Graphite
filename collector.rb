@@ -39,6 +39,7 @@ def get_keys(unisphere,payload,monitor,auth)
   componentId = get_component_id_payload(monitor['scope'])
   output = rest["#{componentId}Info"] if unisphere['version'] == 8
   output = rest["#{componentId}KeyResult"]["#{componentId}Info"] if unisphere['version'] == 7
+  puts output
   return output
 end
 
@@ -90,6 +91,7 @@ def get_perf_metrics(unisphere,payload,monitor,auth)
   rest = rest_post(payload.to_json,"https://#{unisphere['ip']}:#{unisphere['port']}/univmax/restapi/performance/#{monitor['scope']}/metrics", auth)
   output = rest['resultList']['result'][0] if unisphere['version'] == 8
   output = rest['iterator']['resultList']['result'][0] if unisphere['version'] == 7
+  puts output
   return output
 end
 
