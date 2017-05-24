@@ -17,10 +17,11 @@
 	},
 	"unisphere": [
 		{
+
 			"ip": "10.185.55.156",
 			"user": "rubytest",
 			"password": "EMCruby1!",
-			"port": 8086,
+			"port": 8443,
 			"version": 8,
 			"symmetrix": [
 				{ "sid": "000196701905" },
