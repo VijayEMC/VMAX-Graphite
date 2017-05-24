@@ -237,6 +237,7 @@ config['unisphere'].each do |unisphere|
           metrics = get_perf_metrics(unisphere,metric_payload,monitor,auth)
           metrics_param.each do |metric|
             influx_output_payload.push << {series: metric, tags: { array_type: 'symmetrix', sn: symmetrix['sid'], component: monitor['scope'], component_name: key[parent_ids[0]]}, values: { value: metrics[metric] } }  unless monitor['scope'] == "Array"
+            puts metric
             influx_output_payload << {series: metric, tags: { array_type: 'symmetrix', sn: symmetrix['sid'], component: monitor['scope']}, values: { value: metrics[metric] } }  if monitor['scope'] == "Array"
             #influx_output_payload.push({series: metric, tags: { array_type: 'symmetrix', sn: symmetrix['sid'], component: monitor['scope'], component_name: key[parent_ids[0]]}, values: { value: metrics[metric] } } ) unless monitor['scope'] == "Array"
             #influx_output_payload.push({series: metric, tags: { array_type: 'symmetrix', sn: symmetrix['sid'], component: monitor['scope']}, values: { value: metrics[metric] } } ) if monitor['scope'] == "Array"
