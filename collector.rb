@@ -241,6 +241,7 @@ config['unisphere'].each do |unisphere|
         end
       end
     end
+    puts influx_output_payload
     #influxdb.write_points(influx_output_payload) if config['influx']['enabled']
     influxdb.write_point(name, data) if config['influx']['enabled']
     g.send_metrics(graphite_output_payload) if config['graphite']['enabled']
